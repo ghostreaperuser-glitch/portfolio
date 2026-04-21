@@ -1,0 +1,218 @@
+/*
+ * ══════════════════════════════════════════════════════════════════════
+ *  CONFIGURATION — edit this section to manage your contributors
+ * ══════════════════════════════════════════════════════════════════════
+ *
+ *  GITHUB SETUP GUIDE:
+ *  1. Create a NEW public repo called e.g. "uni-contributions" on your GitHub
+ *     (separate from your private website repo — keeps them isolated)
+ *  2. Inside that repo, structure folders like:
+ *       /dr-nakato/coursework.pdf
+ *       /dr-nakato/notes.pdf
+ *       /dr-nakato/README.md
+ *  3. In each contributor below, set:
+ *       githubFolder: "dr-nakato"   ← must match the folder name exactly
+ *  4. The download links go directly to GitHub's raw CDN (raw.githubusercontent.com)
+ *     Visitors download from GitHub — they NEVER touch your private website repo.
+ *
+ *  ADDING A CONTRIBUTOR:
+ *  - Copy one object inside the CONTRIBUTORS array and fill in the fields.
+ *  - photo: put their image in /assets/contributors/ on your website repo
+ *    OR leave as "" to use the auto-generated initials avatar.
+ *  - githubFolder: the folder name inside your public contributions repo.
+ *  - docs: list the EXACT file names inside that folder (max 3 per semester).
+ */
+
+ <script>
+
+
+const GITHUB_USER   = "ghostreaperuser-glitch";          
+const GITHUB_REPO   = "uni-contributions";               // public docs
+const GITHUB_BRANCH = "main";                            
+
+// Raw base URL — this is public CDN, no auth needed
+const RAW_BASE = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}`;
+
+// ─── ADD / EDIT CONTRIBUTORS HERE ───────────────────────────────────────
+const CONTRIBUTORS = [
+  {
+    id: "nakato",
+    name: "Dr. Sarah Nakato",
+    role: "lecturer",
+    dept: "cs",
+    department: "Computer Science",
+    title: "Senior Lecturer — Data Structures",
+    photo: "",                        // e.g. "/assets/contributors/nakato.jpg"
+    semester: "Semester 1, 2025",
+    githubFolder: "dr-nakato",        // folder in your public repo
+    docs: [
+      { name: "Coursework 1 — Linked Lists",  file: "coursework.pdf", type: "pdf" },
+      { name: "Lecture Notes — DSA",           file: "notes.pdf",      type: "pdf" },
+      { name: "README — How to use these docs",file: "README.md",      type: "md"  },
+    ]
+  },
+  {
+    id: "ssebunya",
+    name: "Prof. James Ssebunya",
+    role: "lecturer",
+    dept: "eng",
+    department: "Software Engineering",
+    title: "Professor — Software Architecture",
+    photo: "",
+    semester: "Semester 1, 2025",
+    githubFolder: "prof-ssebunya",
+    docs: [
+      { name: "Coursework — System Design",    file: "coursework.pdf", type: "pdf" },
+      { name: "Notes — Design Patterns",        file: "notes.pdf",      type: "pdf" },
+      { name: "README — Study Guide",           file: "README.md",      type: "md"  },
+    ]
+  },
+  {
+    id: "akullo",
+    name: "Grace Akullo",
+    role: "student",
+    dept: "cs",
+    department: "Computer Science — Year 2",
+    title: "Student Representative",
+    photo: "",
+    semester: "Semester 1, 2025",
+    githubFolder: "grace-akullo",
+    docs: [
+      { name: "Summary Notes — Algorithms",    file: "notes.pdf",      type: "pdf" },
+      { name: "Practice Coursework",            file: "coursework.pdf", type: "pdf" },
+      { name: "README — How to approach exams", file: "README.md",      type: "md"  },
+    ]
+  },
+  {
+    id: "tumwebaze",
+    name: "Ivan Tumwebaze",
+    role: "student",
+    dept: "eng",
+    department: "Software Engineering — Year 3",
+    title: "Verified Student Contributor",
+    photo: "",
+    semester: "Semester 1, 2025",
+    githubFolder: "ivan-tumwebaze",
+    docs: [
+      { name: "Notes — Database Systems",       file: "notes.pdf",      type: "pdf" },
+      { name: "Coursework — SQL Queries",       file: "coursework.pdf", type: "pdf" },
+      { name: "README — Getting Started",       file: "README.md",      type: "md"  },
+    ]
+  },
+];
+// ─── END CONFIGURATION ───────────────────────────────────────────────────
+
+// Helpers
+function getInitials(name) {
+  return name.split(" ").slice(0,2).map(w => w[0]).join("").toUpperCase();
+}
+
+function docIcon(type) {
+  const map = { pdf: "fa-file-pdf pdf", md: "fa-file-lines md", txt: "fa-file-alt txt" };
+  const cls = map[type] || "fa-file other";
+  return `<div class="doc-icon ${type || 'other'}"><i class="fas ${cls.split(' ')[0]}"></i></div>`;
+}
+
+function typeLabel(type) {
+  const map = { pdf: "PDF Document", md: "Markdown / README", txt: "Text File" };
+  return map[type] || "Document";
+}
+
+function buildDownloadUrl(contributor, filename) {
+  return `${RAW_BASE}/${contributor.githubFolder}/${filename}`;
+}
+
+// Build the card grid
+function renderCards(filter) {
+  const grid = document.getElementById("contributors-grid");
+  const list = filter === "all"
+    ? CONTRIBUTORS
+    : CONTRIBUTORS.filter(c => c.role === filter || c.dept === filter);
+
+  if (!list.length) {
+    grid.innerHTML = `<div class="col-12 empty-state"><i class="fas fa-users-slash"></i>No contributors in this category yet.</div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(c => {
+    const avatar = c.photo
+      ? `<img src="${c.photo}" class="contrib-avatar" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+         <div class="contrib-avatar-placeholder" style="display:none;">${getInitials(c.name)}</div>`
+      : `<div class="contrib-avatar-placeholder">${getInitials(c.name)}</div>`;
+
+    const roleIcon = c.role === "lecturer"
+      ? `<i class="fas fa-chalkboard-teacher" style="color:#0090d4;font-size:0.7rem;"></i> Lecturer`
+      : `<i class="fas fa-user-graduate" style="color:#ffd43b;font-size:0.7rem;"></i> Student`;
+
+    return `
+      <div class="col-sm-6 col-md-4 col-lg-3 fade-up" data-role="${c.role}" data-dept="${c.dept}">
+        <div class="contributor-card" onclick="openDocs('${c.id}')">
+          ${avatar}
+          <div class="contrib-name">
+            ${c.name}
+            <i class="fas fa-circle-check ms-1" style="color:#0090d4;font-size:0.75rem;" title="GhostR Verified"></i>
+          </div>
+          <div class="contrib-role">${roleIcon}</div>
+          <div class="contrib-dept">${c.department}</div>
+          <div class="contrib-doc-count">
+            <i class="fas fa-file-circle-check"></i>
+            ${c.docs.length} document${c.docs.length !== 1 ? 's' : ''} · ${c.semester}
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+// Open document modal
+function openDocs(id) {
+  const contrib = CONTRIBUTORS.find(c => c.id === id);
+  if (!contrib) return;
+
+  document.getElementById("modal-contrib-name").textContent = contrib.name;
+  document.getElementById("modal-contrib-role").textContent = contrib.title + " · " + contrib.department;
+
+  const body = document.getElementById("modal-body-content");
+
+  const docsHtml = contrib.docs.map(doc => {
+    const url = buildDownloadUrl(contrib, doc.file);
+    return `
+      <div class="doc-item">
+        ${docIcon(doc.type)}
+        <div class="doc-meta">
+          <div class="doc-name">${doc.name}</div>
+          <div class="doc-type-label">${typeLabel(doc.type)} &mdash; ${contrib.semester}</div>
+        </div>
+        <a href="${url}" class="btn-download" target="_blank" rel="noopener noreferrer" download>
+          <i class="fas fa-download me-1"></i> Download
+        </a>
+      </div>`;
+  }).join("");
+
+  body.innerHTML = `
+    <span class="semester-tag"><i class="fas fa-calendar-alt me-1"></i>${contrib.semester}</span>
+    <p style="font-size:0.85rem;color:var(--muted,#8899aa);margin-bottom:1.2rem;">
+      Files are hosted securely on GitHub and open directly for download. 
+      Always read the README first to understand how to use these documents.
+    </p>
+    ${docsHtml}`;
+
+  const modal = new bootstrap.Modal(document.getElementById("docs-modal"));
+  modal.show();
+}
+
+// Filter buttons
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", function () {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    this.classList.add("active");
+    renderCards(this.dataset.filter);
+  });
+});
+
+// Initial render
+renderCards("all");
+
+// Year in footer (if you include footer)
+const yr = document.getElementById("year");
+if (yr) yr.textContent = new Date().getFullYear();
+</script>
