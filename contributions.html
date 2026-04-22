@@ -305,7 +305,7 @@ async function loadContributors() {
   const grid = document.getElementById('contributors-grid');
   const load = document.getElementById('loading-state');
 
-  if (SHEET_CSV_URL === 'YOUR_GOOGLE_SHEET_CSV_PUBLISH_URL_HERE') {
+  if (SHEET_CSV_URL === 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXJblUL_lbJLSSqSF25xLS1TwkrxFFqiBvTBPvNKnuPboRNlQ6sDPCLB44BIenfzwsZ1-0UvsjRlWj/pub?gid=0&single=true&output=csv') {
     load.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--muted,#6b7a8d);">
       <i class="fas fa-table" style="font-size:2rem;color:#00c876;display:block;margin-bottom:1rem;"></i>
       <strong style="color:var(--text,#e8edf5);">Google Sheet not connected yet.</strong><br><br>
