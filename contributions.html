@@ -6,319 +6,113 @@
   <meta name="description" content="Verified academic contributors — Lecturers and students verified by GhostR Software." />
   <title>Contributions · GhostR Software</title>
 
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0a0f1a" />
+
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Font Awesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <!-- Match your main site CSS -->
+  <!-- Main site CSS -->
   <link href="css/style.css" rel="stylesheet" />
 
   <style>
-    /* ─── Page-specific styles ─── */
-
-    .contrib-hero {
-      padding: 6rem 0 3rem;
-      text-align: center;
-    }
-
+    .contrib-hero { padding: 6rem 0 3rem; text-align: center; }
     .verified-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(0,200,118,0.12);
-      color: #00c876;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 4px 12px;
-      border-radius: 20px;
-      border: 1px solid rgba(0,200,118,0.25);
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(0,200,118,0.12); color: #00c876;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 4px 12px;
+      border-radius: 20px; border: 1px solid rgba(0,200,118,0.25);
     }
-
-    /* ─── Filter bar ─── */
-    .filter-bar {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 2.5rem;
-    }
-
+    .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 2.5rem; }
     .filter-btn {
-      padding: 6px 18px;
-      border-radius: 20px;
+      padding: 6px 18px; border-radius: 20px;
       border: 1px solid var(--border, rgba(255,255,255,0.12));
-      background: transparent;
-      color: var(--muted, #8899aa);
-      font-size: 0.82rem;
-      cursor: pointer;
-      transition: all 0.2s;
+      background: transparent; color: var(--muted, #8899aa);
+      font-size: 0.82rem; cursor: pointer; transition: all 0.2s;
     }
-
-    .filter-btn:hover,
-    .filter-btn.active {
-      background: var(--teal, #00c876);
-      color: #0a0f1a;
-      border-color: var(--teal, #00c876);
-    }
-
-    /* ─── Contributor cards ─── */
+    .filter-btn:hover, .filter-btn.active { background: var(--teal,#00c876); color: #0a0f1a; border-color: var(--teal,#00c876); }
     .contributor-card {
       background: var(--card-bg, #111827);
       border: 1px solid var(--border, rgba(255,255,255,0.08));
-      border-radius: 16px;
-      padding: 1.5rem;
-      cursor: pointer;
+      border-radius: 16px; padding: 1.5rem; cursor: pointer;
       transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden; height: 100%;
     }
-
     .contributor-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #00c876, #0090d4);
-      opacity: 0;
-      transition: opacity 0.25s;
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #00c876, #0090d4); opacity: 0; transition: opacity 0.25s;
     }
-
-    .contributor-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(0,200,118,0.3);
-      box-shadow: 0 12px 32px rgba(0,200,118,0.08);
-    }
-
-    .contributor-card:hover::before {
-      opacity: 1;
-    }
-
-    .contrib-avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid rgba(0,200,118,0.3);
-      margin: 0 auto 0.75rem;
-      display: block;
-    }
-
-    /* Fallback avatar with initials */
+    .contributor-card:hover { transform: translateY(-4px); border-color: rgba(0,200,118,0.3); box-shadow: 0 12px 32px rgba(0,200,118,0.08); }
+    .contributor-card:hover::before { opacity: 1; }
+    .contrib-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(0,200,118,0.3); margin: 0 auto 0.75rem; display: block; }
     .contrib-avatar-placeholder {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
+      width: 80px; height: 80px; border-radius: 50%;
       background: linear-gradient(135deg, #0090d4, #00c876);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #fff;
-      margin: 0 auto 0.75rem;
-      border: 2px solid rgba(0,200,118,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 700; color: #fff;
+      margin: 0 auto 0.75rem; border: 2px solid rgba(0,200,118,0.3);
     }
-
-    .contrib-name {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text, #e8edf5);
-      text-align: center;
-      margin-bottom: 2px;
-    }
-
-    .contrib-role {
-      font-size: 0.78rem;
-      color: var(--muted, #6b7a8d);
-      text-align: center;
-      margin-bottom: 0.6rem;
-    }
-
-    .contrib-dept {
-      font-size: 0.75rem;
-      text-align: center;
-      color: #0090d4;
-      margin-bottom: 0.8rem;
-    }
-
-    .contrib-doc-count {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-size: 0.78rem;
-      color: var(--muted, #6b7a8d);
-    }
-
-    .contrib-doc-count i {
-      color: var(--teal, #00c876);
-      font-size: 0.7rem;
-    }
-
-    /* ─── Modal override ─── */
+    .contrib-name { font-size: 1rem; font-weight: 600; color: var(--text, #e8edf5); text-align: center; margin-bottom: 2px; }
+    .contrib-role { font-size: 0.78rem; color: var(--muted, #6b7a8d); text-align: center; margin-bottom: 0.6rem; }
+    .contrib-dept { font-size: 0.75rem; text-align: center; color: #0090d4; margin-bottom: 0.8rem; }
+    .contrib-doc-count { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.78rem; color: var(--muted, #6b7a8d); }
+    .contrib-doc-count i { color: var(--teal, #00c876); font-size: 0.7rem; }
     .doc-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 0.9rem 1rem;
-      border-radius: 10px;
+      display: flex; align-items: center; gap: 14px;
+      padding: 0.9rem 1rem; border-radius: 10px;
       border: 1px solid var(--border, rgba(255,255,255,0.08));
-      background: rgba(255,255,255,0.02);
-      margin-bottom: 0.75rem;
-      transition: border-color 0.2s;
+      background: rgba(255,255,255,0.02); margin-bottom: 0.75rem; transition: border-color 0.2s;
     }
-
-    .doc-item:hover {
-      border-color: rgba(0,200,118,0.3);
-    }
-
-    .doc-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-    }
-
+    .doc-item:hover { border-color: rgba(0,200,118,0.3); }
+    .doc-icon { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
     .doc-icon.pdf   { background: rgba(220,53,69,0.15); color: #dc3545; }
     .doc-icon.txt   { background: rgba(0,144,212,0.15); color: #0090d4; }
     .doc-icon.md    { background: rgba(0,200,118,0.12); color: #00c876; }
     .doc-icon.other { background: rgba(255,193,7,0.12);  color: #ffc107; }
-
     .doc-meta { flex: 1; min-width: 0; }
-
-    .doc-name {
-      font-size: 0.88rem;
-      font-weight: 500;
-      color: var(--text, #e8edf5);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .doc-type-label {
-      font-size: 0.72rem;
-      color: var(--muted, #6b7a8d);
-      margin-top: 2px;
-    }
-
+    .doc-name { font-size: 0.88rem; font-weight: 500; color: var(--text, #e8edf5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .doc-type-label { font-size: 0.72rem; color: var(--muted, #6b7a8d); margin-top: 2px; }
     .btn-download {
-      background: rgba(0,200,118,0.1);
-      color: #00c876;
-      border: 1px solid rgba(0,200,118,0.25);
-      border-radius: 8px;
-      padding: 5px 12px;
-      font-size: 0.78rem;
-      white-space: nowrap;
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-      flex-shrink: 0;
+      background: rgba(0,200,118,0.1); color: #00c876;
+      border: 1px solid rgba(0,200,118,0.25); border-radius: 8px;
+      padding: 5px 12px; font-size: 0.78rem; white-space: nowrap;
+      text-decoration: none; transition: background 0.2s, color 0.2s; flex-shrink: 0;
     }
-
-    .btn-download:hover {
-      background: #00c876;
-      color: #0a0f1a;
-    }
-
-    .loading-spinner {
-      text-align: center;
-      padding: 2rem;
-      color: var(--muted, #6b7a8d);
-      font-size: 0.85rem;
-    }
-
-    .error-msg {
-      text-align: center;
-      padding: 1.5rem;
-      color: #dc3545;
-      font-size: 0.85rem;
-      background: rgba(220,53,69,0.08);
-      border-radius: 10px;
-    }
-
-    .semester-tag {
-      display: inline-block;
-      font-size: 0.7rem;
-      padding: 2px 10px;
-      border-radius: 12px;
-      background: rgba(0,144,212,0.12);
-      color: #0090d4;
-      border: 1px solid rgba(0,144,212,0.2);
-      margin-bottom: 1rem;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 2.5rem;
-      color: var(--muted, #6b7a8d);
-    }
-
-    .empty-state i {
-      font-size: 2rem;
-      margin-bottom: 0.75rem;
-      display: block;
-      opacity: 0.4;
-    }
-
-    .how-it-works {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--border, rgba(255,255,255,0.06));
-      border-radius: 16px;
-      padding: 2rem;
-      margin-bottom: 3rem;
-    }
-
-    .how-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 1rem;
-    }
-
+    .btn-download:hover { background: #00c876; color: #0a0f1a; }
+    .loading-spinner { text-align: center; padding: 3rem; color: var(--muted, #6b7a8d); }
+    .loading-spinner i { font-size: 2rem; color: #00c876; margin-bottom: 1rem; display: block; }
+    .error-msg { text-align: center; padding: 1.5rem; color: #dc3545; font-size: 0.85rem; background: rgba(220,53,69,0.08); border-radius: 10px; }
+    .empty-state { text-align: center; padding: 2.5rem; color: var(--muted, #6b7a8d); }
+    .empty-state i { font-size: 2rem; margin-bottom: 0.75rem; display: block; opacity: 0.4; }
+    .how-it-works { background: rgba(255,255,255,0.02); border: 1px solid var(--border, rgba(255,255,255,0.06)); border-radius: 16px; padding: 2rem; margin-bottom: 3rem; }
+    .how-step { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 1rem; }
     .how-step:last-child { margin-bottom: 0; }
-
-    .how-num {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: rgba(0,200,118,0.12);
-      color: #00c876;
-      border: 1px solid rgba(0,200,118,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      flex-shrink: 0;
+    .how-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(0,200,118,0.12); color: #00c876; border: 1px solid rgba(0,200,118,0.25); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+    .how-text { font-size: 0.85rem; color: var(--muted, #8899aa); line-height: 1.6; padding-top: 4px; }
+    .search-box { max-width: 400px; margin: 0 auto 1.5rem; position: relative; }
+    .search-box input {
+      width: 100%; padding: 10px 18px 10px 40px; border-radius: 20px;
+      border: 1px solid var(--border, rgba(255,255,255,0.12));
+      background: var(--card-bg, #111827); color: var(--text, #e8edf5);
+      font-size: 0.85rem; outline: none; transition: border-color 0.2s;
     }
-
-    .how-text {
-      font-size: 0.85rem;
-      color: var(--muted, #8899aa);
-      line-height: 1.6;
-      padding-top: 4px;
-    }
+    .search-box input:focus { border-color: rgba(0,200,118,0.4); }
+    .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted,#6b7a8d); font-size: 0.8rem; }
+    #no-results { display: none; text-align: center; padding: 2rem; color: var(--muted,#6b7a8d); font-size: 0.9rem; }
   </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════
-     NAVBAR   main site
-════════════════════════════════════════════ -->
+<!-- ═══ NAVBAR ═══ -->
 <nav class="navbar navbar-expand-lg">
   <div class="container">
     <a class="navbar-brand" href="index.html">&lt;<span>GhostR Software Company</span>/&gt;</a>
-
-    <button class="navbar-toggler border-0" type="button"
-            data-bs-toggle="collapse" data-bs-target="#navMenu">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse justify-content-end" id="navMenu">
       <ul class="navbar-nav gap-1">
         <li class="nav-item"><a class="nav-link" href="index.html#home">Home</a></li>
@@ -331,72 +125,55 @@
   </div>
 </nav>
 
-
-<!-- ═══════════════════════════════════════════
-     HERO
-════════════════════════════════════════════ -->
+<!-- ═══ HERO ═══ -->
 <section class="contrib-hero">
   <div class="container">
-    <span class="verified-badge">
-      <i class="fas fa-circle-check"></i> Verified Contributors
-    </span>
+    <span class="verified-badge"><i class="fas fa-circle-check"></i> Verified Contributors</span>
     <h1 class="hero-name mt-3" style="font-size:2.4rem;">
       Academic <span class="accent">Contributions</span>
     </h1>
     <p class="hero-desc mx-auto" style="max-width:560px;">
-      Lecturers and students who hold a GhostR verification badge. Each verified contributor 
+      Lecturers and students who hold a GhostR verification badge. Each verified contributor
       publishes up to <strong>3 documents per semester</strong> — coursework, notes, and a README guide.
     </p>
-
-    <!-- How it works strip -->
     <div class="how-it-works mt-4 text-start mx-auto" style="max-width:600px;">
-      <div class="how-step">
-        <div class="how-num">1</div>
-        <div class="how-text">Browse verified lecturers and students below. Blue-tick means GhostR has confirmed their academic identity.</div>
-      </div>
-      <div class="how-step">
-        <div class="how-num">2</div>
-        <div class="how-text">Click any contributor's card to see the 3 documents they published this semester.</div>
-      </div>
-      <div class="how-step">
-        <div class="how-num">3</div>
-        <div class="how-text">Click <strong>Download</strong> on any document — files open directly from GitHub's secure servers.</div>
-      </div>
+      <div class="how-step"><div class="how-num">1</div><div class="how-text">Browse verified lecturers and students below. Blue-tick means GhostR has confirmed their academic identity.</div></div>
+      <div class="how-step"><div class="how-num">2</div><div class="how-text">Click any contributor's card to see the documents they published this semester.</div></div>
+      <div class="how-step"><div class="how-num">3</div><div class="how-text">Click <strong>Download</strong> on any document — files open directly from GitHub's secure servers.</div></div>
     </div>
   </div>
 </section>
 
-
-<!-- ═══════════════════════════════════════════
-     FILTER BAR
-════════════════════════════════════════════ -->
+<!-- ═══ FILTER + SEARCH ═══ -->
 <div class="container mb-2">
+  <div class="search-box">
+    <i class="fas fa-search"></i>
+    <input type="text" id="search-input" placeholder="Search by name, department…" />
+  </div>
   <div class="filter-bar">
     <button class="filter-btn active" data-filter="all">All</button>
     <button class="filter-btn" data-filter="lecturer">Lecturers</button>
     <button class="filter-btn" data-filter="student">Students</button>
-    <!-- Add more departments as you grow -->
     <button class="filter-btn" data-filter="cs">Computer Science</button>
     <button class="filter-btn" data-filter="eng">Engineering</button>
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════
-     CONTRIBUTORS GRID
-════════════════════════════════════════════ -->
+<!-- ═══ GRID ═══ -->
 <section class="section-pad" style="padding-top:1rem;">
   <div class="container">
-    <div class="row g-4" id="contributors-grid">
-      <!-- Cards are injected here by JS from the CONTRIBUTORS array below -->
+    <div id="loading-state" class="loading-spinner">
+      <i class="fas fa-circle-notch fa-spin"></i>Loading contributors…
+    </div>
+    <div class="row g-4" id="contributors-grid"></div>
+    <div id="no-results">
+      <i class="fas fa-search" style="opacity:0.3;font-size:1.8rem;display:block;margin-bottom:0.5rem;"></i>
+      No contributors match your search.
     </div>
   </div>
 </section>
 
-
-<!-- ═══════════════════════════════════════════
-     DOCUMENT MODAL
-════════════════════════════════════════════ -->
+<!-- ═══ MODAL ═══ -->
 <div class="modal fade" id="docs-modal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
@@ -407,9 +184,7 @@
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body" id="modal-body-content">
-        <!-- Populated dynamically -->
-      </div>
+      <div class="modal-body" id="modal-body-content"></div>
       <div class="modal-footer">
         <button class="btn-outline-custom" data-bs-dismiss="modal">Close</button>
       </div>
@@ -417,11 +192,149 @@
   </div>
 </div>
 
-
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ══════════════════════════════════════════════════════════════════════════════
+//  ▶  PASTE YOUR GOOGLE SHEET CSV URL BELOW (the only line you ever need to
+//     change when adding new contributors — just update the Sheet, done!)
+//
+//  HOW TO GET THE URL:
+//    1. Open your Google Sheet
+//    2. File → Share → "Anyone with the link" → Viewer
+//    3. File → Share → Publish to web → Sheet1 → CSV format → Publish
+//    4. Copy the URL it gives you and paste it below
+//
+//  SHEET COLUMNS (row 1 must be exactly these headers):
+//    name | role | department | avatar_url | doc1_name | doc1_url |
+//    doc2_name | doc2_url | doc3_name | doc3_url | semester | filter_tag
+//
+//  COLUMN NOTES:
+//    role        → "Lecturer" or "Student"
+//    filter_tag  → one of:  lecturer  student  cs  eng
+//    avatar_url  → direct image link, or leave blank (shows coloured initials)
+//    doc_url     → use the RAW GitHub link:
+//                  https://raw.githubusercontent.com/ghostreaperuser-glitch/
+//                  YOUR-REPO/main/docs/filename.pdf
+//    Leave doc2 / doc3 columns blank if contributor has fewer than 3 docs.
+// ══════════════════════════════════════════════════════════════════════════════
+const SHEET_CSV_URL = 'YOUR_GOOGLE_SHEET_CSV_PUBLISH_URL_HERE';
+// ══════════════════════════════════════════════════════════════════════════════
 
+let activeFilter = 'all';
 
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = splitLine(lines[0]);
+  return lines.slice(1).map(line => {
+    const v = splitLine(line), o = {};
+    headers.forEach((h,i) => { o[h.trim()] = (v[i]||'').trim(); });
+    return o;
+  }).filter(r => r.name && r.name !== 'name');
+}
 
+function splitLine(line) {
+  const out=[]; let cur='', q=false;
+  for(const ch of line){
+    if(ch==='"'){q=!q;}
+    else if(ch===','&&!q){out.push(cur);cur='';}
+    else cur+=ch;
+  }
+  out.push(cur); return out;
+}
+
+function ext(name){ const m=name.match(/\.(\w+)$/); return m?m[1].toLowerCase():'other'; }
+function extIcon(e){ return e==='pdf'?'<i class="fas fa-file-pdf"></i>':['doc','docx'].includes(e)?'<i class="fas fa-file-word"></i>':e==='md'?'<i class="fab fa-markdown"></i>':'<i class="fas fa-file-alt"></i>'; }
+function extCls(e){ return e==='pdf'?'pdf':['doc','docx'].includes(e)?'txt':e==='md'?'md':'other'; }
+
+function buildCard(c) {
+  const ini = c.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const avatar = c.avatar_url
+    ? `<img src="${c.avatar_url}" class="contrib-avatar" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="contrib-avatar-placeholder" style="display:none">${ini}</div>`
+    : `<div class="contrib-avatar-placeholder">${ini}</div>`;
+  const docs = [[c.doc1_name,c.doc1_url],[c.doc2_name,c.doc2_url],[c.doc3_name,c.doc3_url]].filter(([n])=>n);
+  const safe = JSON.stringify(c).replace(/"/g,'&quot;');
+  return `
+    <div class="col-sm-6 col-lg-4 contributor-item"
+         data-filter="${(c.filter_tag||c.role||'').toLowerCase()}"
+         data-name="${c.name.toLowerCase()}"
+         data-dept="${c.department.toLowerCase()}">
+      <div class="contributor-card" onclick='openModal(${safe})'>
+        ${avatar}
+        <div class="contrib-name">${c.name}
+          <i class="fas fa-circle-check" style="color:#0090d4;font-size:0.7rem;vertical-align:middle;margin-left:4px;" title="GhostR Verified"></i>
+        </div>
+        <div class="contrib-role">${c.role}</div>
+        <div class="contrib-dept">${c.department}</div>
+        ${c.semester?`<div style="text-align:center;margin-bottom:0.6rem;"><span style="font-size:0.7rem;padding:2px 10px;border-radius:12px;background:rgba(0,144,212,0.12);color:#0090d4;border:1px solid rgba(0,144,212,0.2);">${c.semester}</span></div>`:''}
+        <div class="contrib-doc-count"><i class="fas fa-circle"></i> ${docs.length} document${docs.length!==1?'s':''}</div>
+      </div>
+    </div>`;
+}
+
+function openModal(c) {
+  document.getElementById('modal-contrib-name').textContent = c.name;
+  document.getElementById('modal-contrib-role').textContent = `${c.role} · ${c.department}`;
+  const docs = [[c.doc1_name,c.doc1_url],[c.doc2_name,c.doc2_url],[c.doc3_name,c.doc3_url]].filter(([n])=>n);
+  document.getElementById('modal-body-content').innerHTML = docs.length
+    ? docs.map(([name,url])=>`
+        <div class="doc-item">
+          <div class="doc-icon ${extCls(ext(name))}">${extIcon(ext(name))}</div>
+          <div class="doc-meta">
+            <div class="doc-name">${name}</div>
+            <div class="doc-type-label">${ext(name).toUpperCase()} · GitHub</div>
+          </div>
+          <a href="${url}" target="_blank" class="btn-download"><i class="fas fa-download me-1"></i>Download</a>
+        </div>`).join('')
+    : '<div class="empty-state"><i class="fas fa-folder-open"></i>No documents uploaded yet.</div>';
+  new bootstrap.Modal(document.getElementById('docs-modal')).show();
+}
+
+function renderGrid() {
+  const q = document.getElementById('search-input').value.toLowerCase().trim();
+  let vis = 0;
+  document.querySelectorAll('.contributor-item').forEach(el => {
+    const show = (activeFilter==='all'||el.dataset.filter===activeFilter) &&
+                 (!q||el.dataset.name.includes(q)||el.dataset.dept.includes(q));
+    el.style.display = show?'':'none';
+    if(show) vis++;
+  });
+  document.getElementById('no-results').style.display = vis===0?'block':'none';
+}
+
+async function loadContributors() {
+  const grid = document.getElementById('contributors-grid');
+  const load = document.getElementById('loading-state');
+
+  if (SHEET_CSV_URL === 'YOUR_GOOGLE_SHEET_CSV_PUBLISH_URL_HERE') {
+    load.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--muted,#6b7a8d);">
+      <i class="fas fa-table" style="font-size:2rem;color:#00c876;display:block;margin-bottom:1rem;"></i>
+      <strong style="color:var(--text,#e8edf5);">Google Sheet not connected yet.</strong><br><br>
+      Open <code>contributions.html</code>, find <code>SHEET_CSV_URL</code> and paste your published CSV link.<br>
+      <small>See the comment block in the script for full instructions.</small></div>`;
+    return;
+  }
+
+  try {
+    const res  = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(SHEET_CSV_URL)}`);
+    const json = await res.json();
+    const data = parseCSV(json.contents);
+    load.style.display = 'none';
+    if (!data.length) { grid.innerHTML='<div class="empty-state col-12"><i class="fas fa-users"></i>No contributors added yet.</div>'; return; }
+    grid.innerHTML = data.map(buildCard).join('');
+    renderGrid();
+  } catch(e) {
+    load.innerHTML = `<div class="error-msg"><i class="fas fa-exclamation-circle me-2"></i>Could not load contributors. Check your Sheet URL.<br><small>${e.message}</small></div>`;
+  }
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilter = btn.dataset.filter;
+  renderGrid();
+}));
+document.getElementById('search-input').addEventListener('input', renderGrid);
+loadContributors();
+</script>
 </body>
 </html>
