@@ -438,30 +438,66 @@
       <!-- Form -->
       <div class="col-lg-8">
         <div class="contact-card">
-          <form id="contact-form" class="contact-form" novalidate>
+
+          <!-- ══ WhatsApp quick link ══ -->
+          <a href="https://wa.me/256758388080?text=Hello%20GhostR%2C%20I%20want%20to%20get%20in%20touch%20about%3A%20"
+             target="_blank"
+             style="display:flex;align-items:center;gap:12px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.25);border-radius:12px;padding:14px 18px;text-decoration:none;margin-bottom:1.5rem;transition:background 0.2s;">
+            <i class="fab fa-whatsapp" style="font-size:1.6rem;color:#25d366;flex-shrink:0;"></i>
+            <div>
+              <div style="font-weight:600;color:#25d366;font-size:0.92rem;">Chat on WhatsApp</div>
+              <div style="font-size:0.78rem;color:var(--muted,#8899aa);">Fastest way to reach me — I reply within minutes</div>
+            </div>
+            <i class="fas fa-arrow-right ms-auto" style="color:#25d366;opacity:0.6;"></i>
+          </a>
+
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.2rem;">
+            <div style="flex:1;height:1px;background:var(--border,rgba(255,255,255,0.08));"></div>
+            <span style="font-size:0.75rem;color:var(--muted,#6b7a8d);letter-spacing:0.06em;">OR SEND AN EMAIL</span>
+            <div style="flex:1;height:1px;background:var(--border,rgba(255,255,255,0.08));"></div>
+          </div>
+
+          <!--
+            ══ HOW TO CONNECT THIS FORM TO YOUR GMAIL ══
+            1. Go to https://formspree.io → Sign Up (free)
+            2. Create a New Form → set the email to ashrafsoftwareguy@gmail.com
+            3. Formspree gives you a form endpoint like: https://formspree.io/f/xyzabcde
+            4. Replace YOUR_FORM_ID below with just the ID part (e.g. xyzabcde)
+            That's it — every submission will land in your Gmail inbox!
+          -->
+          <form id="contact-form" class="contact-form" novalidate
+                action="https://formspree.io/f/YOUR_FORM_ID"
+                method="POST">
+
+            <!-- Hidden field so Formspree knows where to send replies -->
+            <input type="hidden" name="_replyto" value="ashrafsoftwareguy@gmail.com" />
+            <!-- Custom subject line in Gmail -->
+            <input type="hidden" name="_subject" name="_subject" value="New message from GhostR Website" />
+
             <div class="row g-3">
               <div class="col-sm-6">
-                <label class="form-label">Your Name </label>
-                <input type="text" class="form-control" placeholder="Ahereza Anita" required />
+                <label class="form-label">Your Name</label>
+                <input type="text" name="name" class="form-control" placeholder="Ahereza Anita" required />
               </div>
               <div class="col-sm-6">
                 <label class="form-label">Email Address</label>
-                <input type="email" class="form-control" placeholder="aherezaanita@gmail.com" required />
+                <input type="email" name="email" class="form-control" placeholder="aherezaanita@gmail.com" required />
               </div>
               <div class="col-12">
                 <label class="form-label">Subject</label>
-                <input type="text" class="form-control" placeholder="Internship Details" />
+                <input type="text" name="subject" class="form-control" placeholder="Internship Details" />
               </div>
               <div class="col-12">
                 <label class="form-label">Message</label>
-                <textarea class="form-control" rows="5" placeholder="Can we discuss about Diploma or Bachelor Internships" required></textarea>
+                <textarea name="message" class="form-control" rows="5" placeholder="Can we discuss about Diploma or Bachelor Internships" required></textarea>
               </div>
               <div class="col-12 pt-1">
                 <button type="submit" class="btn-primary-custom w-100 justify-content-center">
-                  <i class="fas fa-paper-plane"></i> Send Message
+                  <i class="fas fa-paper-plane"></i> Send Message to Gmail
                 </button>
               </div>
             </div>
+
           </form>
         </div>
       </div>
@@ -503,344 +539,379 @@
 
 
 <!-- ═══════════════════════════════════════════
-     SKILL MODALS
+     SERVICE MODALS
 ════════════════════════════════════════════ -->
 
-<!-- C Modal -->
+<!-- Shared WhatsApp number — change once here if your number changes -->
+<!-- Format: international, no spaces, no + -->
+<!-- +256 758 388 080  →  256758388080 -->
+
+<!-- ── MODAL: Student Internships ── -->
 <div class="modal fade" id="modal-c" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <div>
-          <h5 class="modal-title">C Language</h5>
-          <div class="section-label mt-1" style="margin-bottom:0">Systems &amp; Embedded Programming</div>
+          <h5 class="modal-title">Student Internships</h5>
+          <div class="section-label mt-1" style="margin-bottom:0">100,000 UGX · 2 Months</div>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="modal-skill-icon" style="background:rgba(0,144,212,0.12);color:#0090d4;font-size:1.8rem;">C</div>
-        <div class="modal-section-label">Overview</div>
-        <p class="modal-desc">C is the cornerstone of systems programming — the language behind Linux, databases, &amp; embedded firmware. Mastery of C means mastery of the machine: memory management, pointer arithmetic, &amp; performance that leaves nothing on the table.</p>
-        <div class="modal-section-label">Proficiency</div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Pointers &amp; Memory</span><span class="skill-progress-pct">85%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="85"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">File I/O &amp; Streams</span><span class="skill-progress-pct">80%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="80"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Structs &amp; Unions</span><span class="skill-progress-pct">82%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="82"></div></div>
-        </div>
-        <div class="modal-section-label mt-3">Key Concepts</div>
+        <div class="modal-skill-icon" style="background:rgba(0,144,212,0.12);color:#0090d4;font-size:1.8rem;">SI</div>
+        <div class="modal-section-label">Who This Is For</div>
+        <p class="modal-desc">Designed for IT students, Computer Science students, and Computer Teacher trainees from Universities &amp; Vocational Institutes who need hands-on internship experience to complete their academic requirements.</p>
+        <div class="modal-section-label">What You Will Learn</div>
         <div class="modal-tag-list">
-          <span class="modal-tag">Pointers</span><span class="modal-tag">Dynamic Memory</span><span class="modal-tag">malloc/free</span>
-          <span class="modal-tag">Structs</span><span class="modal-tag">File I/O</span><span class="modal-tag">Preprocessor</span>
-          <span class="modal-tag">Bitwise Ops</span><span class="modal-tag">Linked Lists</span>
+          <span class="modal-tag">C, C++, Java</span>
+          <span class="modal-tag">PHP &amp; MySQL</span>
+          <span class="modal-tag">HTML / CSS / Bootstrap</span>
+          <span class="modal-tag">Python</span>
+          <span class="modal-tag">Node.js &amp; MERN Stack</span>
+          <span class="modal-tag">JavaScript</span>
+          <span class="modal-tag">Database Creation &amp; Management</span>
+          <span class="modal-tag">Systems Development</span>
+          <span class="modal-tag">Basic Computing &amp; Web Development</span>
         </div>
+        <div class="modal-section-label mt-3">Duration &amp; Cost</div>
+        <p class="modal-desc">2 months of structured, practical internship training. <strong>100,000 UGX total</strong>. An official internship letter/report is provided on completion for university submission.</p>
       </div>
-      <div class="modal-footer"><button class="btn-outline-custom" data-bs-dismiss="modal">Close</button></div>
+      <div class="modal-footer">
+        <a href="https://wa.me/256758388080?text=Hello%20GhostR%2C%20I%20am%20interested%20in%20the%20Student%20Internship%20(100k%20UGX%20%E2%80%94%202%20Months).%20Please%20share%20more%20details." target="_blank" class="btn-primary-custom">
+          <i class="fab fa-whatsapp me-2"></i> Book on WhatsApp
+        </a>
+        <button class="btn-outline-custom" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- C++ Modal -->
+<!-- ── MODAL: Final Year Students Projects ── -->
 <div class="modal fade" id="modal-cpp" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <div>
-          <h5 class="modal-title">C++</h5>
-          <div class="section-label mt-1" style="margin-bottom:0">Object-Oriented &amp; Performance</div>
+          <h5 class="modal-title">Final Year Students Projects</h5>
+          <div class="section-label mt-1" style="margin-bottom:0">100,000 UGX / Project</div>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="modal-skill-icon" style="background:rgba(30,136,229,0.12);color:#1e88e5;">C++</div>
-        <div class="modal-section-label">Overview</div>
-        <p class="modal-desc">C++ extends C with powerful abstractions — classes, inheritance, templates, &amp; the STL — while retaining full control over hardware. It's the language of game engines, compilers, &amp; high-frequency trading systems.</p>
-        <div class="modal-section-label">Proficiency</div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">OOP &amp; Classes</span><span class="skill-progress-pct">83%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="83"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">STL &amp; Containers</span><span class="skill-progress-pct">78%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="78"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Templates</span><span class="skill-progress-pct">72%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="72"></div></div>
-        </div>
-        <div class="modal-section-label mt-3">Key Concepts</div>
+        <div class="modal-skill-icon" style="background:rgba(30,136,229,0.12);color:#1e88e5;">FYSP</div>
+        <div class="modal-section-label">Who This Is For</div>
+        <p class="modal-desc">Final year students at every academic level who need a complete, working project to graduate. GhostR delivers a fully documented, functional system tailored to your institution's requirements.</p>
+        <div class="modal-section-label">Student Levels Covered</div>
         <div class="modal-tag-list">
-          <span class="modal-tag">Classes</span><span class="modal-tag">Inheritance</span><span class="modal-tag">Polymorphism</span>
-          <span class="modal-tag">Templates</span><span class="modal-tag">STL</span><span class="modal-tag">RAII</span>
-          <span class="modal-tag">Smart Pointers</span><span class="modal-tag">Operator Overloading</span>
+          <span class="modal-tag">Masters Students</span>
+          <span class="modal-tag">Bachelor / Degree Students</span>
+          <span class="modal-tag">Diploma Students</span>
+          <span class="modal-tag">Certificate Students</span>
         </div>
+        <div class="modal-section-label mt-3">Project Types Delivered</div>
+        <div class="modal-tag-list">
+          <span class="modal-tag">Website Prototypes</span>
+          <span class="modal-tag">Database Systems</span>
+          <span class="modal-tag">System Templates</span>
+          <span class="modal-tag">Research Projects</span>
+        </div>
+        <div class="modal-section-label mt-3">Cost</div>
+        <p class="modal-desc"><strong>100,000 UGX per project.</strong> Includes full source code, documentation, and a walkthrough session so you can explain and defend your project confidently.</p>
       </div>
-      <div class="modal-footer"><button class="btn-outline-custom" data-bs-dismiss="modal">Close</button></div>
+      <div class="modal-footer">
+        <a href="https://wa.me/256758388080?text=Hello%20GhostR%2C%20I%20need%20a%20Final%20Year%20Project%20(100k%20UGX).%20Please%20share%20more%20details." target="_blank" class="btn-primary-custom">
+          <i class="fab fa-whatsapp me-2"></i> Book on WhatsApp
+        </a>
+        <button class="btn-outline-custom" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Java Modal -->
+<!-- ── MODAL: School Seminars & Bootcamps ── -->
 <div class="modal fade" id="modal-java" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <div><h5 class="modal-title">Java</h5><div class="section-label mt-1" style="margin-bottom:0">Enterprise &amp; OOP</div></div>
+        <div><h5 class="modal-title">School Seminars &amp; Bootcamps</h5><div class="section-label mt-1" style="margin-bottom:0">200,000 UGX / Day</div></div>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="modal-skill-icon" style="background:rgba(240,80,40,0.12);color:#f05028;">☕</div>
+        <div class="modal-skill-icon" style="background:rgba(240,80,40,0.12);color:#f05028;">SSB</div>
         <div class="modal-section-label">Overview</div>
-        <p class="modal-desc">Java is the gold standard for enterprise software — strongly typed, platform-independent via the JVM, &amp; equipped with one of the richest ecosystems in programming. Ideal for large-scale applications, Android development, &amp; backend services.</p>
-        <div class="modal-section-label">Proficiency</div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">OOP &amp; Design Patterns</span><span class="skill-progress-pct">84%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="84"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Collections &amp; Generics</span><span class="skill-progress-pct">80%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="80"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Multithreading</span><span class="skill-progress-pct">70%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="70"></div></div>
-        </div>
-        <div class="modal-section-label mt-3">Key Concepts</div>
+        <p class="modal-desc">Intensive one-day seminars and bootcamp sessions delivered at your school or institution. Designed to inspire finalizing students and introduce learners to real-world IT &amp; programming skills in a single focused day.</p>
+        <div class="modal-section-label">Session Types</div>
         <div class="modal-tag-list">
-          <span class="modal-tag">OOP</span><span class="modal-tag">Interfaces</span><span class="modal-tag">Generics</span>
-          <span class="modal-tag">Collections</span><span class="modal-tag">Exception Handling</span><span class="modal-tag">JVM</span>
-          <span class="modal-tag">Threads</span><span class="modal-tag">Streams API</span>
+          <span class="modal-tag">Seminars for Finalizing Students</span>
+          <span class="modal-tag">Bootcamp Sessions for IT / Programming Learners</span>
         </div>
+        <div class="modal-section-label mt-3">Topics Covered</div>
+        <div class="modal-tag-list">
+          <span class="modal-tag">Basic Computing Skills</span>
+          <span class="modal-tag">AI &amp; New Tech Skills</span>
+          <span class="modal-tag">Career Development</span>
+          <span class="modal-tag">Programming Enthusiast Approach</span>
+        </div>
+        <div class="modal-section-label mt-3">Cost</div>
+        <p class="modal-desc"><strong>200,000 UGX per day.</strong> GhostR travels to your school. Contact via WhatsApp to book a date and discuss the session agenda for your students.</p>
       </div>
-      <div class="modal-footer"><button class="btn-outline-custom" data-bs-dismiss="modal">Close</button></div>
+      <div class="modal-footer">
+        <a href="https://wa.me/256758388080?text=Hello%20GhostR%2C%20I%20would%20like%20to%20book%20a%20School%20Seminar%20or%20Bootcamp%20(200k%20UGX%2FDay).%20Please%20share%20details." target="_blank" class="btn-primary-custom">
+          <i class="fab fa-whatsapp me-2"></i> Book on WhatsApp
+        </a>
+        <button class="btn-outline-custom" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Python Modal -->
+<!-- ── MODAL: Business Management Software ── -->
 <div class="modal fade" id="modal-python" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <div><h5 class="modal-title">Python</h5><div class="section-label mt-1" style="margin-bottom:0">Scripting &amp; Data</div></div>
+        <div><h5 class="modal-title">Business Management Software</h5><div class="section-label mt-1" style="margin-bottom:0">Starting @ 1,000,000 UGX</div></div>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="modal-skill-icon" style="background:rgba(55,120,200,0.12);color:#ffd43b;">🐍</div>
+        <div class="modal-skill-icon" style="background:rgba(55,120,200,0.12);color:#ffd43b;">BMS</div>
         <div class="modal-section-label">Overview</div>
-        <p class="modal-desc">Python's philosophy of readable, expressive code makes it the go-to language for scripting, automation, data science, &amp; rapid prototyping. Its massive library ecosystem means there's a package for almost anything.</p>
-        <div class="modal-section-label">Proficiency</div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Scripting &amp; Automation</span><span class="skill-progress-pct">88%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="88"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Data Manipulation</span><span class="skill-progress-pct">75%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="75"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">OOP &amp; Modules</span><span class="skill-progress-pct">80%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="80"></div></div>
-        </div>
-        <div class="modal-section-label mt-3">Key Concepts</div>
+        <p class="modal-desc">Custom-built desktop or web-based management software for your specific business. GhostR builds from scratch to match your workflow — not a generic off-the-shelf product. Your system, your rules.</p>
+        <div class="modal-section-label">Who This Is For</div>
         <div class="modal-tag-list">
-          <span class="modal-tag">List Comprehensions</span><span class="modal-tag">Decorators</span>
-          <span class="modal-tag">File I/O</span><span class="modal-tag">APIs / requests</span>
-          <span class="modal-tag">OOP</span><span class="modal-tag">Regex</span><span class="modal-tag">JSON</span>
+          <span class="modal-tag">Shops &amp; Supermarkets</span>
+          <span class="modal-tag">Pharmacies</span>
+          <span class="modal-tag">Hardware Stores</span>
+          <span class="modal-tag">Electronics Shops</span>
+          <span class="modal-tag">Farms</span>
+          <span class="modal-tag">SACCOs</span>
+          <span class="modal-tag">Money Lenders</span>
         </div>
+        <div class="modal-section-label mt-3">Features Delivered</div>
+        <div class="modal-tag-list">
+          <span class="modal-tag">Accounting Systems</span>
+          <span class="modal-tag">Investment Trackers</span>
+          <span class="modal-tag">AI-Powered Insights</span>
+          <span class="modal-tag">APIs &amp; Website Management</span>
+          <span class="modal-tag">Inventory Control</span>
+          <span class="modal-tag">Staff &amp; Sales Reports</span>
+        </div>
+        <div class="modal-section-label mt-3">Pricing</div>
+        <p class="modal-desc">Starting at <strong>1,000,000 UGX</strong>. Final price depends on scope and features. Send a WhatsApp message to discuss your specific business needs and get a quote.</p>
       </div>
-      <div class="modal-footer"><button class="btn-outline-custom" data-bs-dismiss="modal">Close</button></div>
+      <div class="modal-footer">
+        <a href="https://wa.me/256758388080?text=Hello%20GhostR%2C%20I%20am%20interested%20in%20Business%20Management%20Software%20(starting%201M%20UGX).%20My%20business%20is%3A%20" target="_blank" class="btn-primary-custom">
+          <i class="fab fa-whatsapp me-2"></i> Book on WhatsApp
+        </a>
+        <button class="btn-outline-custom" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- HTML/CSS Modal -->
+<!-- ── MODAL: Business Website, Hosting & Online Marketing ── -->
 <div class="modal fade" id="modal-html" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <div><h5 class="modal-title">HTML &amp; CSS</h5><div class="section-label mt-1" style="margin-bottom:0">Structure &amp; Style</div></div>
+        <div><h5 class="modal-title">Business Website, Hosting &amp; Online Marketing</h5><div class="section-label mt-1" style="margin-bottom:0">Starting @ 500,000 UGX</div></div>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="modal-skill-icon" style="background:rgba(230,66,36,0.12);color:#e64228;">&lt;/&gt;</div>
+        <div class="modal-skill-icon" style="background:rgba(230,66,36,0.12);color:#e64228;">BWHOM</div>
         <div class="modal-section-label">Overview</div>
-        <p class="modal-desc">HTML &amp; CSS are the bedrock of the web. Semantic HTML ensures accessible, SEO-friendly structure, while CSS — with Flexbox, Grid, custom properties, &amp; animations — gives complete control over the visual experience.</p>
-        <div class="modal-section-label">Proficiency</div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Semantic HTML5</span><span class="skill-progress-pct">90%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="90"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">CSS Layouts (Flex/Grid)</span><span class="skill-progress-pct">87%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="87"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Animations &amp; Transitions</span><span class="skill-progress-pct">82%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="82"></div></div>
-        </div>
-        <div class="modal-section-label mt-3">Key Concepts</div>
+        <p class="modal-desc">Get your business fully online — a professional website, a registered domain, reliable hosting, and an active social media presence. GhostR handles the tech so you can focus on running your business.</p>
+        <div class="modal-section-label">What's Included</div>
         <div class="modal-tag-list">
-          <span class="modal-tag">Semantic Tags</span><span class="modal-tag">Forms</span><span class="modal-tag">Flexbox</span>
-          <span class="modal-tag">CSS Grid</span><span class="modal-tag">Custom Properties</span><span class="modal-tag">Media Queries</span>
-          <span class="modal-tag">Keyframes</span><span class="modal-tag">Pseudo-elements</span>
+          <span class="modal-tag">Professional Business Website</span>
+          <span class="modal-tag">Domain Name Registration</span>
+          <span class="modal-tag">Website Hosting Setup</span>
+          <span class="modal-tag">Social Media Account Booming</span>
+          <span class="modal-tag">Content Creation Support</span>
+          <span class="modal-tag">Sleek, Elegant Online Look</span>
         </div>
+        <div class="modal-section-label mt-3">Pricing</div>
+        <p class="modal-desc">Starting at <strong>500,000 UGX.</strong> Hosting and domain renewal fees apply annually. Message on WhatsApp to discuss your business type and get a tailored package.</p>
       </div>
-      <div class="modal-footer"><button class="btn-outline-custom" data-bs-dismiss="modal">Close</button></div>
+      <div class="modal-footer">
+        <a href="https://wa.me/256758388080?text=Hello%20GhostR%2C%20I%20need%20a%20Business%20Website%2C%20Hosting%20%26%20Online%20Marketing%20(from%20500k%20UGX).%20My%20business%20is%3A%20" target="_blank" class="btn-primary-custom">
+          <i class="fab fa-whatsapp me-2"></i> Book on WhatsApp
+        </a>
+        <button class="btn-outline-custom" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- JS Modal -->
+<!-- ── MODAL: Desktop & Mobile Applications Development ── -->
 <div class="modal fade" id="modal-js" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <div><h5 class="modal-title">JavaScript</h5><div class="section-label mt-1" style="margin-bottom:0">Interactivity &amp; DOM</div></div>
+        <div><h5 class="modal-title">Desktop &amp; Mobile Applications Development</h5><div class="section-label mt-1" style="margin-bottom:0">Starting @ 500,000 UGX</div></div>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="modal-skill-icon" style="background:rgba(247,223,30,0.12);color:#f7df1e;">JS</div>
+        <div class="modal-skill-icon" style="background:rgba(247,223,30,0.12);color:#f7df1e;">DMAD</div>
         <div class="modal-section-label">Overview</div>
-        <p class="modal-desc">JavaScript is the only language native to the browser — making everything interactive. Modern ES6+ JavaScript with Promises, async/await, modules, &amp; the Fetch API enables rich, dynamic web applications without any framework.</p>
-        <div class="modal-section-label">Proficiency</div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">DOM Manipulation</span><span class="skill-progress-pct">86%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="86"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Async / Fetch API</span><span class="skill-progress-pct">80%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="80"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">ES6+ Features</span><span class="skill-progress-pct">84%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="84"></div></div>
-        </div>
-        <div class="modal-section-label mt-3">Key Concepts</div>
+        <p class="modal-desc">Need a mobile app for your customers or a desktop application for your office? GhostR builds cross-platform apps for Android, iPhone, Windows, and macOS — from idea to a deployed, working product.</p>
+        <div class="modal-section-label">Platforms Supported</div>
         <div class="modal-tag-list">
-          <span class="modal-tag">ES6+</span><span class="modal-tag">Promises</span><span class="modal-tag">async/await</span>
-          <span class="modal-tag">Fetch API</span><span class="modal-tag">Events</span><span class="modal-tag">Closures</span>
-          <span class="modal-tag">LocalStorage</span><span class="modal-tag">Modules</span>
+          <span class="modal-tag">Android Apps</span>
+          <span class="modal-tag">iPhone (iOS) Apps</span>
+          <span class="modal-tag">Windows Desktop Apps</span>
+          <span class="modal-tag">macOS Apps</span>
         </div>
+        <div class="modal-section-label mt-3">Example Apps Built</div>
+        <div class="modal-tag-list">
+          <span class="modal-tag">Business Management Apps</span>
+          <span class="modal-tag">School / Student Apps</span>
+          <span class="modal-tag">E-commerce Apps</span>
+          <span class="modal-tag">Utility &amp; Productivity Tools</span>
+        </div>
+        <div class="modal-section-label mt-3">Pricing</div>
+        <p class="modal-desc">Starting at <strong>500,000 UGX.</strong> Price scales with complexity and number of features. Message on WhatsApp with your app idea to get a quote.</p>
       </div>
-      <div class="modal-footer"><button class="btn-outline-custom" data-bs-dismiss="modal">Close</button></div>
+      <div class="modal-footer">
+        <a href="https://wa.me/256758388080?text=Hello%20GhostR%2C%20I%20need%20a%20Desktop%20or%20Mobile%20App%20(from%20500k%20UGX).%20My%20app%20idea%20is%3A%20" target="_blank" class="btn-primary-custom">
+          <i class="fab fa-whatsapp me-2"></i> Book on WhatsApp
+        </a>
+        <button class="btn-outline-custom" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Bootstrap Modal -->
+<!-- ── MODAL: Ethical Hacking ── -->
 <div class="modal fade" id="modal-bs" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <div><h5 class="modal-title">Bootstrap 5</h5><div class="section-label mt-1" style="margin-bottom:0">UI Framework</div></div>
+        <div><h5 class="modal-title">Ethical Hacking</h5><div class="section-label mt-1" style="margin-bottom:0">1,000,000 UGX · 6 Months</div></div>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="modal-skill-icon" style="background:rgba(121,82,179,0.12);color:#7952b3;">BS5</div>
+        <div class="modal-skill-icon" style="background:rgba(121,82,179,0.12);color:#7952b3;">EH</div>
         <div class="modal-section-label">Overview</div>
-        <p class="modal-desc">Bootstrap 5 is the world's most popular CSS framework. Its 12-column grid, utility classes, &amp; ready-made components allow for rapid development of polished, fully responsive interfaces — no jQuery dependency in v5.</p>
-        <div class="modal-section-label">Proficiency</div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Grid &amp; Layouts</span><span class="skill-progress-pct">92%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="92"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Components &amp; JS Plugins</span><span class="skill-progress-pct">88%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="88"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Custom Theming</span><span class="skill-progress-pct">80%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="80"></div></div>
-        </div>
-        <div class="modal-section-label mt-3">Key Concepts</div>
+        <p class="modal-desc">A 6-month structured course in ethical hacking and cybersecurity. Learn to think like an attacker to defend systems — covering OS fundamentals, penetration testing techniques, social engineering, and SOC analysis.</p>
+        <div class="modal-section-label">Curriculum</div>
         <div class="modal-tag-list">
-          <span class="modal-tag">Grid System</span><span class="modal-tag">Flexbox Utils</span><span class="modal-tag">Modals</span>
-          <span class="modal-tag">Navbar</span><span class="modal-tag">Cards</span><span class="modal-tag">Forms</span>
-          <span class="modal-tag">Offcanvas</span><span class="modal-tag">Tooltips</span>
+          <span class="modal-tag">Linux / macOS / Windows Fundamentals</span>
+          <span class="modal-tag">System Bypass Techniques</span>
+          <span class="modal-tag">XSS &amp; Web Attacks</span>
+          <span class="modal-tag">Social Media Account Safety &amp; Hacking</span>
+          <span class="modal-tag">SQL Injection Attacks</span>
+          <span class="modal-tag">Ransomware &amp; Website Hacking</span>
+          <span class="modal-tag">SOC Analysis</span>
+          <span class="modal-tag">Lateral Movements</span>
+          <span class="modal-tag">IP Tracking</span>
+          <span class="modal-tag">Data Recovery</span>
+          <span class="modal-tag">Digital Footprint Erasure</span>
         </div>
+        <div class="modal-section-label mt-3">Cost</div>
+        <p class="modal-desc"><strong>1,000,000 UGX for the full 6-month course.</strong> This is a practical, hands-on course — not just theory. Message on WhatsApp to confirm start dates and availability.</p>
       </div>
-      <div class="modal-footer"><button class="btn-outline-custom" data-bs-dismiss="modal">Close</button></div>
+      <div class="modal-footer">
+        <a href="https://wa.me/256758388080?text=Hello%20GhostR%2C%20I%20am%20interested%20in%20the%20Ethical%20Hacking%20course%20(1M%20UGX%20%E2%80%94%206%20Months).%20Please%20share%20enrollment%20details." target="_blank" class="btn-primary-custom">
+          <i class="fab fa-whatsapp me-2"></i> Book on WhatsApp
+        </a>
+        <button class="btn-outline-custom" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- PHP Modal -->
+<!-- ── MODAL: Desktop & Mobile Software Cracking ── -->
 <div class="modal fade" id="modal-php" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <div><h5 class="modal-title">PHP</h5><div class="section-label mt-1" style="margin-bottom:0">Server-Side Scripting</div></div>
+        <div><h5 class="modal-title">Desktop &amp; Mobile Software Cracking</h5><div class="section-label mt-1" style="margin-bottom:0">500,000 UGX</div></div>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="modal-skill-icon" style="background:rgba(136,146,190,0.12);color:#8892be;">PHP</div>
+        <div class="modal-skill-icon" style="background:rgba(136,146,190,0.12);color:#8892be;">DMSC</div>
         <div class="modal-section-label">Overview</div>
-        <p class="modal-desc">PHP powers a significant portion of the web's backend. From dynamic page generation to REST API development, PHP combined with MySQL is a battle-tested stack for building robust, data-driven web applications.</p>
-        <div class="modal-section-label">Proficiency</div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Forms &amp; Sessions</span><span class="skill-progress-pct">85%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="85"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">MySQL Integration</span><span class="skill-progress-pct">82%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="82"></div></div>
-        </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">OOP PHP</span><span class="skill-progress-pct">72%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="72"></div></div>
-        </div>
-        <div class="modal-section-label mt-3">Key Concepts</div>
+        <p class="modal-desc">Professional forensic and reverse engineering services for locked devices and software. GhostR helps you regain access to your own hardware and data through safe, verified methods.</p>
+        <div class="modal-section-label">Services Offered</div>
         <div class="modal-tag-list">
-          <span class="modal-tag">MySQLi / PDO</span><span class="modal-tag">Sessions</span><span class="modal-tag">Cookies</span>
-          <span class="modal-tag">Form Handling</span><span class="modal-tag">File Upload</span><span class="modal-tag">JSON APIs</span>
-          <span class="modal-tag">OOP</span><span class="modal-tag">Authentication</span>
+          <span class="modal-tag">Phone &amp; Computer Password Removal</span>
+          <span class="modal-tag">Decryption Services</span>
+          <span class="modal-tag">Reverse Engineering Apps &amp; Software</span>
+          <span class="modal-tag">Passcode / Pattern Removal</span>
+          <span class="modal-tag">FRP &amp; Computer SOC Bypass</span>
+          <span class="modal-tag">Security Analysis</span>
+          <span class="modal-tag">Data Recovery</span>
         </div>
+        <div class="modal-section-label mt-3">Cost</div>
+        <p class="modal-desc"><strong>500,000 UGX.</strong> Bring your device to the office at Rich Electronics, Ibanda — or message first on WhatsApp to describe the issue before visiting.</p>
       </div>
-      <div class="modal-footer"><button class="btn-outline-custom" data-bs-dismiss="modal">Close</button></div>
+      <div class="modal-footer">
+        <a href="https://wa.me/256758388080?text=Hello%20GhostR%2C%20I%20need%20Software%20Cracking%20%2F%20Device%20Unlocking%20services%20(500k%20UGX).%20My%20issue%20is%3A%20" target="_blank" class="btn-primary-custom">
+          <i class="fab fa-whatsapp me-2"></i> Book on WhatsApp
+        </a>
+        <button class="btn-outline-custom" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- SQL Modal -->
+<!-- ── MODAL: Computing & Programming Courses (shared by BC, WDH, PCAL, UPLC cards) ── -->
 <div class="modal fade" id="modal-sql" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <div><h5 class="modal-title">SQL</h5><div class="section-label mt-1" style="margin-bottom:0">Databases &amp; Queries</div></div>
+        <div><h5 class="modal-title">Computing &amp; Programming Courses</h5><div class="section-label mt-1" style="margin-bottom:0">100k – 200k UGX / Month</div></div>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="modal-skill-icon" style="background:rgba(0,200,118,0.1);color:#00c876;">SQL</div>
-        <div class="modal-section-label">Overview</div>
-        <p class="modal-desc">SQL is the universal language of relational databases. Mastery of SQL means designing efficient schemas, writing complex multi-table queries, optimizing with indexes, &amp; ensuring data integrity through constraints &amp; transactions.</p>
-        <div class="modal-section-label">Proficiency</div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Query Writing</span><span class="skill-progress-pct">87%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="87"></div></div>
+        <div class="modal-skill-icon" style="background:rgba(0,200,118,0.1);color:#00c876;">📚</div>
+
+        <div class="modal-section-label">Basic Computing — 200k UGX/Month</div>
+        <p class="modal-desc">For learners who need to become computer-ready for jobs like receptionist, data entry, or office work.</p>
+        <div class="modal-tag-list mb-3">
+          <span class="modal-tag">Computer Literacy</span>
+          <span class="modal-tag">Microsoft Office Suite</span>
+          <span class="modal-tag">LibreOffice Suite</span>
+          <span class="modal-tag">Windows &amp; Linux Desktop</span>
         </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Database Design</span><span class="skill-progress-pct">82%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="82"></div></div>
+
+        <div class="modal-section-label">Website Design &amp; Hosting Skills — 200k UGX/Month</div>
+        <p class="modal-desc">Practical course on building modern websites, understanding web languages, and getting online with a domain and CMS.</p>
+        <div class="modal-tag-list mb-3">
+          <span class="modal-tag">HTML / CSS / Bootstrap</span>
+          <span class="modal-tag">PHP &amp; JavaScript</span>
+          <span class="modal-tag">MySQL / Node.js / MERN</span>
+          <span class="modal-tag">Deployment</span>
         </div>
-        <div class="skill-progress-wrap">
-          <div class="skill-progress-header"><span class="skill-progress-name">Optimization</span><span class="skill-progress-pct">72%</span></div>
-          <div class="skill-progress-bar"><div class="skill-progress-fill" data-pct="72"></div></div>
+
+        <div class="modal-section-label">Programming &amp; Coding to Advanced — 100k UGX/Month</div>
+        <p class="modal-desc">2 months (beginner) · 4 months (intermediate) · 6 months (advanced). Covers the full programming stack from scratch.</p>
+        <div class="modal-tag-list mb-3">
+          <span class="modal-tag">HTML / CSS / Bootstrap</span>
+          <span class="modal-tag">JavaScript / Node.js</span>
+          <span class="modal-tag">PHP &amp; SQL</span>
+          <span class="modal-tag">Java &amp; JavaFX / Swing</span>
+          <span class="modal-tag">Python &amp; Tkinter</span>
+          <span class="modal-tag">C &amp; GTK</span>
+          <span class="modal-tag">Objective-C for iOS</span>
         </div>
-        <div class="modal-section-label mt-3">Key Concepts</div>
+
+        <div class="modal-section-label">Upskilling to Elite Level — 200k UGX/Month</div>
+        <p class="modal-desc">Already know the basics? Level up to senior-level programming and security techniques.</p>
         <div class="modal-tag-list">
-          <span class="modal-tag">JOINs</span><span class="modal-tag">Subqueries</span><span class="modal-tag">Normalization</span>
-          <span class="modal-tag">Indexes</span><span class="modal-tag">Transactions</span><span class="modal-tag">Foreign Keys</span>
-          <span class="modal-tag">Views</span><span class="modal-tag">Stored Procedures</span>
+          <span class="modal-tag">Senior Programming</span>
+          <span class="modal-tag">Senior Debugging</span>
+          <span class="modal-tag">Reverse Engineering Specialist</span>
+          <span class="modal-tag">Penetration Testing</span>
         </div>
       </div>
-      <div class="modal-footer"><button class="btn-outline-custom" data-bs-dismiss="modal">Close</button></div>
+      <div class="modal-footer">
+        <a href="https://wa.me/256758388080?text=Hello%20GhostR%2C%20I%20am%20interested%20in%20one%20of%20your%20Computing%20or%20Programming%20courses.%20Please%20share%20more%20details." target="_blank" class="btn-primary-custom">
+          <i class="fab fa-whatsapp me-2"></i> Book on WhatsApp
+        </a>
+        <button class="btn-outline-custom" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
