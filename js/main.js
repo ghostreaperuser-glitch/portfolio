@@ -265,20 +265,18 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // ─── TYPEWRITER ───────────────────────────
-  const roles = [
-    'Systems Programmer',
-    'Web Developer',
-    'Database Engineer',
-    'Backend Architect',
-    'Full-Stack Developer',
-    'Software Engineer',
-    'Tech Enthusiast',
-    'Problem Solver',
-    'Code Artist',
-    'Open Source Contributor',
-    'Lifelong Learner',
-    'Polyglot Coder',
-    'Creative Technologist'
+  const roles = [ //languages supported
+    'C Programming Language',
+    'C++ Programming',
+    'Java Programming',
+    'MySQL, NOSQL',
+    'PHP Scripting',
+    'Python',
+    'HTML/ CSS/ Bootstrap',
+    'JavaScript',
+    'Nodejs',
+    'MERN Stack'
+    
   ];
   let roleIdx = 0, charIdx = 0, isDeleting = false;
   const typingEl = document.getElementById('typing-text');
