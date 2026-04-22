@@ -15,16 +15,29 @@ const CACHE_ASSETS = [
 ];
 
 // ── Install: pre-cache shell assets ──
-self.addEventListener('install', event => {
+self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      // Cache what we can; ignore failures for missing optional files
-      return Promise.allSettled(
-        CACHE_ASSETS.map(url => cache.add(url).catch(() => {}))
-      );
-    }).then(() => self.skipWaiting())
+    caches.open("ghost-cache").then(cache => {
+      return cache.addAll([
+        "./index.html",
+        "./css/style.css",
+        "./js/app.js",
+        "./images/icon-192.png",
+        "./images/icon-512.png"
+      ]);
+    })
   );
 });
+
+// ── Fetch: network-first for HTML, cache-first for assets ──
+self.addEventListener("fetch", event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
+  );
+});
+
 
 // ── Activate: remove old caches ──
 self.addEventListener('activate', event => {
@@ -34,11 +47,6 @@ self.addEventListener('activate', event => {
     ).then(() => self.clients.claim())
   );
 });
-
-// ── Fetch: network-first for HTML, cache-first for assets ──
-self.addEventListener('fetch', event => {
-  const { request } = event;
-  const url = new URL(request.url);
 
   // Only handle same-origin and CDN requests
   if (!['https:', 'http:'].includes(url.protocol)) return;

@@ -928,13 +928,16 @@
 <script src="js/main.js"></script>
 <!-- PWA Service Worker -->
 <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('GhostR SW registered:', reg.scope))
-        .catch(err => console.log('SW registration failed:', err));
-    });
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./service-worker.js", { scope: "/portfolio/" })
+      .then(reg => {
+        console.log("Service worker registered with scope:", reg.scope);
+      })
+      .catch(err => {
+        console.error("Service worker registration failed:", err);
+      });
   }
 </script>
+
 </body>
 </html>
