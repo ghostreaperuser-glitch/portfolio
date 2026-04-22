@@ -1,82 +1,85 @@
-// GhostR Software — Service Worker
-// Caches the site shell so it loads instantly and works offline.
+// GhostR Software — Service Worker v2
+// Strategy:
+//   HTML pages  → Network first, fall back to cache
+//   CSS/JS/img  → Cache first, fall back to network
 
-const CACHE_NAME   = 'ghostr-v1';
-const CACHE_ASSETS = [
-  '/',
-  '/index.html',
-  '/contributions.html',
-  '/manifest.json',
-  '/css/style.css',
-  '/js/main.js',
-  '/images/icon-192.png',
-  '/images/icon-512.png',
-  // Bootstrap & Font Awesome are cached on first fetch via network-first strategy
+const CACHE = 'ghostr-v2';
+const SHELL = [
+  'index.html',
+  'contributions.html',
+  'manifest.json',
+  'css/style.css',
+  'js/main.js',
+  'images/icon-192.png',
+  'images/icon-512.png'
 ];
 
-// ── Install: pre-cache shell assets ──
-self.addEventListener("install", event => {
+// ── INSTALL: cache the site shell ─────────────────────────────────────
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open("ghost-cache").then(cache => {
-  return cache.addAll([
-    "/portfolio/index.html",
-    "/portfolio/css/style.css",
-    "/portfolio/js/app.js",
-    "/portfolio/images/icon-192.png",
-    "/portfolio/images/icon-512.png"
-  ]);
-});
-
+    caches.open(CACHE).then(cache =>
+      Promise.all(
+        SHELL.map(url => cache.add(url).catch(() =>
+          console.warn('[SW] Could not pre-cache:', url)
+        ))
+      )
+    ).then(() => self.skipWaiting())
   );
 });
 
-// ── Fetch: network-first for HTML, cache-first for assets ──
-self.addEventListener("fetch", event => {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
-  );
-});
-
-
-// ── Activate: remove old caches ──
+// ── ACTIVATE: delete every old cache ──────────────────────────────────
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    caches.keys()
+      .then(keys => Promise.all(
+        keys.filter(k => k !== CACHE).map(k => caches.delete(k))
+      ))
+      .then(() => self.clients.claim())
   );
 });
 
-  // Only handle same-origin and CDN requests
-  if (!['https:', 'http:'].includes(url.protocol)) return;
+// ── FETCH ──────────────────────────────────────────────────────────────
+self.addEventListener('fetch', event => {
+  const req = event.request;
+  const url = new URL(req.url);
 
-  // Network-first for HTML pages (always fresh content)
-  if (request.headers.get('accept')?.includes('text/html')) {
+  // Only handle GET requests
+  if (req.method !== 'GET') return;
+
+  // Skip third-party requests we don't need to cache
+  // (allorigins proxy, formspree, whatsapp, etc.)
+  const thirdParty = [
+    'allorigins.win', 'corsproxy.io', 'formspree.io',
+    'wa.me', 'api.allorigins'
+  ];
+  if (thirdParty.some(d => url.hostname.includes(d))) return;
+
+  // HTML → Network first, cache fallback
+  if (req.headers.get('accept')?.includes('text/html')) {
     event.respondWith(
-      fetch(request)
+      fetch(req)
         .then(res => {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(request, clone));
+          const copy = res.clone();
+          caches.open(CACHE).then(c => c.put(req, copy));
           return res;
         })
-        .catch(() => caches.match(request).then(r => r || caches.match('/index.html')))
+        .catch(() =>
+          caches.match(req).then(cached => cached || caches.match('index.html'))
+        )
     );
     return;
   }
 
-  // Cache-first for CSS, JS, images, fonts
+  // Assets → Cache first, network fallback
   event.respondWith(
-    caches.match(request).then(cached => {
+    caches.match(req).then(cached => {
       if (cached) return cached;
-      return fetch(request).then(res => {
+      return fetch(req).then(res => {
         if (res.ok) {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(request, clone));
+          caches.open(CACHE).then(c => c.put(req, res.clone()));
         }
         return res;
-      }).catch(() => new Response('Offline', { status: 503 }));
+      }).catch(() => new Response('Unavailable offline', { status: 503 }));
     })
   );
 });
