@@ -930,14 +930,11 @@
 <script>
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./service-worker.js", { scope: "/portfolio/" })
-      .then(reg => {
-        console.log("Service worker registered with scope:", reg.scope);
-      })
-      .catch(err => {
-        console.error("Service worker registration failed:", err);
-      });
+      .then(reg => console.log("SW scope:", reg.scope))
+      .catch(err => console.error("SW failed:", err));
   }
 </script>
+
 
 </body>
 </html>

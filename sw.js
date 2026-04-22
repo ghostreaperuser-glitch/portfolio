@@ -18,14 +18,15 @@ const CACHE_ASSETS = [
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open("ghost-cache").then(cache => {
-      return cache.addAll([
-        "./index.html",
-        "./css/style.css",
-        "./js/app.js",
-        "./images/icon-192.png",
-        "./images/icon-512.png"
-      ]);
-    })
+  return cache.addAll([
+    "/portfolio/index.html",
+    "/portfolio/css/style.css",
+    "/portfolio/js/app.js",
+    "/portfolio/images/icon-192.png",
+    "/portfolio/images/icon-512.png"
+  ]);
+});
+
   );
 });
 
