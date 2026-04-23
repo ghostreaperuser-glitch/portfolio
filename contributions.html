@@ -157,8 +157,11 @@
     <button class="filter-btn active" data-filter="all">All</button>
     <button class="filter-btn" data-filter="lecturer">Lecturers</button>
     <button class="filter-btn" data-filter="student">Students</button>
-    <button class="filter-btn" data-filter="cs">Computer Science</button>
-    <button class="filter-btn" data-filter="eng">Engineering</button>
+    <button class="filter-btn" data-filter="cs">Information Technology</button>
+    <button class="filter-btn" data-filter="eng">Business Administration</button>
+    <button class="filter-btn" data-filter="eng">Education</button>
+    <button class="filter-btn" data-filter="eng">Social Sciences</button>
+    <button class="filter-btn" data-filter="eng">Humanities</button>
   </div>
 </div>
 
@@ -202,28 +205,7 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 <script>
-// ══════════════════════════════════════════════════════════════════════════════
-//  ▶  PASTE YOUR GOOGLE SHEET CSV URL BELOW (the only line you ever need to
-//     change when adding new contributors — just update the Sheet, done!)
-//
-//  HOW TO GET THE URL:
-//    1. Open your Google Sheet
-//    2. File → Share → "Anyone with the link" → Viewer
-//    3. File → Share → Publish to web → Sheet1 → CSV format → Publish
-//    4. Copy the URL it gives you and paste it below
-//
-//  SHEET COLUMNS (row 1 must be exactly these headers):
-//    name | role | department | avatar_url | doc1_name | doc1_url |
-//    doc2_name | doc2_url | doc3_name | doc3_url | semester | filter_tag
-//
-//  COLUMN NOTES:
-//    role        → "Lecturer" or "Student"
-//    filter_tag  → one of:  lecturer  student  cs  eng
-//    avatar_url  → direct image link, or leave blank (shows coloured initials)
-//    doc_url     → use the RAW GitHub link:
-//                  https://raw.githubusercontent.com/ghostreaperuser-glitch/
-//                  YOUR-REPO/main/docs/filename.pdf
-//    Leave doc2 / doc3 columns blank if contributor has fewer than 3 docs.
+/
 // ══════════════════════════════════════════════════════════════════════════════
 const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXJblUL_lbJLSSqSF25xLS1TwkrxFFqiBvTBPvNKnuPboRNlQ6sDPCLB44BIenfzwsZ1-0UvsjRlWj/pub?gid=0&single=true&output=csv';
 // ══════════════════════════════════════════════════════════════════════════════
