@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="GhostR Academic Contributions — verified posts from lecturers and students." />
-  <title>Contributions · GhostR Software</title>
+  <title>Contributions | GhostR Software</title>
 
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
@@ -16,8 +16,36 @@
   <noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" /></noscript>
   <link href="css/style.css" rel="stylesheet" />
 
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Ssenteza Ashiraf — Founder of GhostR Software, BIT student, and full-stack developer in Uganda.">
+  <meta name="keywords" content="Ssenteza Ashiraf, GhostR Software, Uganda developer, portfolio, full-stack developer, BIT student">
+  <meta name="author" content="Ssenteza Ashiraf">
+
+  <!-- Open Graph (for social sharing) -->
+  <meta property="og:title" content="Ssenteza Ashiraf | Contributions">
+  <meta property="og:description" content="Founder of GhostR Software, BIT student, and full-stack developer. Explore projects, courses, and contributions.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ghostreaperuser-glitch.github.io/portfolio">
+  <meta property="og:image" content="https://ghostreaperuser-glitch.github.io/portfolio/images/512.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ssenteza Ashiraf | Contributions">
+  <meta name="twitter:description" content="GhostR Software founder and full-stack developer.">
+  <meta name="twitter:image" content="https://ghostreaperuser-glitch.github.io/portfolio/images/512.png">
+
   <!-- Favicon -->
-  <link rel="icon" href="images/icon-192.png" type="image/png">
+  <link rel="icon" href="images/192.png" type="image/png">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0a0f1a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="GhostR" />
+  <link rel="apple-touch-icon" href="images/192.png" />
+
 
   <style>
     :root {
@@ -36,6 +64,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow-x: hidden; }
 
     body {
       background: var(--bg);
@@ -889,13 +918,12 @@ document.getElementById("signup-btn").addEventListener("click", async () => {
   const btn = document.getElementById("signup-btn");
   btn.disabled=true; btn.textContent="Creating…";
 
-  const {data,error} = await sb.auth.signUp({
-    email,
-    password: pass,
-    options: {
-      emailRedirectTo: window.location.origin + window.location.pathname
-    }
-  });
+  const authOptions = {};
+  if (window.location.protocol === "http:" || window.location.protocol === "https:") {
+    authOptions.emailRedirectTo = window.location.origin + window.location.pathname;
+  }
+
+  const {data,error} = await sb.auth.signUp({ email, password: pass }, authOptions);
   if (error) {
     msg("signup-msg", error.message, "error");
     btn.disabled=false; btn.textContent="Create Account";
@@ -907,9 +935,11 @@ document.getElementById("signup-btn").addEventListener("click", async () => {
     id: data.user.id, full_name:name, role, department:dept, verified:false
   });
 
-  msg("signup-msg",
-    "Account created! Check your email to confirm it, then sign in. Message GhostR on WhatsApp to get verified fast.",
-    "success");
+  const successText = authOptions.emailRedirectTo
+    ? "Account created! Check your email to confirm it, then sign in. Message GhostR on WhatsApp to get verified fast."
+    : "Account created! Check your email to confirm it, then sign in. If you opened this page directly from a file URL, the email redirect may not work. Open the page over http(s) or host it so the confirmation link reaches this page.";
+
+  msg("signup-msg", successText, "success");
 
   btn.disabled=false; btn.textContent="Create Account";
 });
