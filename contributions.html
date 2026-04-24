@@ -3,376 +3,1252 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Verified academic contributors — Lecturers and students verified by GhostR Software." />
+  <meta name="description" content="GhostR Academic Contributions — verified posts from lecturers and students." />
   <title>Contributions · GhostR Software</title>
 
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0a0f1a" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+  <link rel="preconnect" href="https://nhlzclqacldotqexgpcw.supabase.co" crossorigin />
 
-   <!-- Favicon -->
-  <link rel="icon" href="images/192.png" type="image/png">
-
-  <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <!-- Main site CSS -->
-  <link href="css/style.css" rel="stylesheet" />
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" /></noscript>
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <link rel="shortcut icon" href="images/192.png" type="image/x-icon">
 
   <style>
-    .contrib-hero { padding: 6rem 0 3rem; text-align: center; }
-    .verified-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(0,200,118,0.12); color: #00c876;
-      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
-      text-transform: uppercase; padding: 4px 12px;
-      border-radius: 20px; border: 1px solid rgba(0,200,118,0.25);
+    :root {
+      --bg:      #080d17;
+      --surface: #0f1623;
+      --card:    #131d2e;
+      --border:  rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.12);
+      --text:    #e2eaf5;
+      --muted:   #6b7a90;
+      --teal:    #00c876;
+      --blue:    #0090d4;
+      --gold:    #f7c948;
+      --danger:  #e05252;
+      --radius:  14px;
     }
-    .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 2.5rem; }
-    .filter-btn {
-      padding: 6px 18px; border-radius: 20px;
-      border: 1px solid var(--border, rgba(255,255,255,0.12));
-      background: transparent; color: var(--muted, #8899aa);
-      font-size: 0.82rem; cursor: pointer; transition: all 0.2s;
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
     }
-    .filter-btn:hover, .filter-btn.active { background: var(--teal,#00c876); color: #0a0f1a; border-color: var(--teal,#00c876); }
-    .contributor-card {
-      background: var(--card-bg, #111827);
-      border: 1px solid var(--border, rgba(255,255,255,0.08));
-      border-radius: 16px; padding: 1.5rem; cursor: pointer;
-      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
-      position: relative; overflow: hidden; height: 100%;
+
+    /* ── THREE-COLUMN LAYOUT ── */
+    .contrib-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr 280px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 70px;
+      min-height: calc(100vh - 70px);
     }
-    .contributor-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, #00c876, #0090d4); opacity: 0; transition: opacity 0.25s;
+
+    @media (max-width: 1024px) {
+      .contrib-layout { grid-template-columns: 1fr; }
+      .left-sidebar, .right-sidebar { display: none; }
     }
-    .contributor-card:hover { transform: translateY(-4px); border-color: rgba(0,200,118,0.3); box-shadow: 0 12px 32px rgba(0,200,118,0.08); }
-    .contributor-card:hover::before { opacity: 1; }
-    .contrib-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(0,200,118,0.3); margin: 0 auto 0.75rem; display: block; }
-    .contrib-avatar-placeholder {
-      width: 80px; height: 80px; border-radius: 50%;
-      background: linear-gradient(135deg, #0090d4, #00c876);
+
+    /* ── SIDEBARS ── */
+    .left-sidebar, .right-sidebar {
+      padding: 1.5rem 1rem;
+      position: sticky;
+      top: 70px;
+      height: calc(100vh - 70px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border2) transparent;
+    }
+
+    .left-sidebar  { border-right: 1px solid var(--border); }
+    .right-sidebar { border-left:  1px solid var(--border); }
+
+    /* ── FEED COLUMN ── */
+    .feed-column { border-right: 1px solid var(--border); }
+
+    .feed-header {
+      position: sticky;
+      top: 70px;
+      background: rgba(8,13,23,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.2rem;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .feed-header h2 { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
+
+    /* ── CARDS ── */
+    .side-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .side-card-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+    }
+
+    /* ── AUTH TABS ── */
+    .auth-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.1rem;
+    }
+
+    .auth-tab {
+      flex: 1;
+      text-align: center;
+      padding: 0.6rem;
+      cursor: pointer;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--muted);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color .15s, border-color .15s;
+    }
+
+    .auth-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+    .auth-form-wrap { display: none; }
+    .auth-form-wrap.active { display: block; }
+
+    /* ── FIELDS ── */
+    .field-group { margin-bottom: 0.7rem; }
+
+    .field-label {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 4px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .field-input, .field-select {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: var(--text);
+      font-size: 0.84rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    .field-input:focus, .field-select:focus { border-color: var(--teal); }
+    .field-select option { background: #131d2e; }
+
+    .auth-btn {
+      width: 100%;
+      background: var(--teal);
+      color: #050d18;
+      border: none;
+      border-radius: 8px;
+      padding: 9px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      margin-top: 0.3rem;
+      transition: opacity .15s;
+    }
+
+    .auth-btn:hover:not(:disabled) { opacity: .87; }
+    .auth-btn:disabled { opacity: .45; cursor: not-allowed; }
+
+    .auth-msg {
+      font-size: 0.76rem;
+      margin-top: 0.5rem;
+      padding: 6px 10px;
+      border-radius: 6px;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .auth-msg.error   { background: rgba(224,82,82,0.12);  color: #e08080; display: block; }
+    .auth-msg.success { background: rgba(0,200,118,0.10);  color: var(--teal); display: block; }
+    .auth-msg.info    { background: rgba(0,144,212,0.10);  color: #7bc8f0;  display: block; }
+
+    /* ── USER PANEL ── */
+    .user-panel-avatar {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; font-weight: 700; color: #fff;
-      margin: 0 auto 0.75rem; border: 2px solid rgba(0,200,118,0.3);
+      font-weight: 700; font-size: 1rem;
+      margin-bottom: 0.7rem;
+      overflow: hidden;
     }
-    .contrib-name { font-size: 1rem; font-weight: 600; color: var(--text, #e8edf5); text-align: center; margin-bottom: 2px; }
-    .contrib-role { font-size: 0.78rem; color: var(--muted, #6b7a8d); text-align: center; margin-bottom: 0.6rem; }
-    .contrib-dept { font-size: 0.75rem; text-align: center; color: #0090d4; margin-bottom: 0.8rem; }
-    .contrib-doc-count { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.78rem; color: var(--muted, #6b7a8d); }
-    .contrib-doc-count i { color: var(--teal, #00c876); font-size: 0.7rem; }
-    .doc-item {
-      display: flex; align-items: center; gap: 14px;
-      padding: 0.9rem 1rem; border-radius: 10px;
-      border: 1px solid var(--border, rgba(255,255,255,0.08));
-      background: rgba(255,255,255,0.02); margin-bottom: 0.75rem; transition: border-color 0.2s;
+
+    .user-panel-avatar img { width:100%;height:100%;object-fit:cover; }
+
+    .user-panel-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
     }
-    .doc-item:hover { border-color: rgba(0,200,118,0.3); }
-    .doc-icon { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-    .doc-icon.pdf   { background: rgba(220,53,69,0.15); color: #dc3545; }
-    .doc-icon.txt   { background: rgba(0,144,212,0.15); color: #0090d4; }
-    .doc-icon.md    { background: rgba(0,200,118,0.12); color: #00c876; }
-    .doc-icon.other { background: rgba(255,193,7,0.12);  color: #ffc107; }
-    .doc-meta { flex: 1; min-width: 0; }
-    .doc-name { font-size: 0.88rem; font-weight: 500; color: var(--text, #e8edf5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .doc-type-label { font-size: 0.72rem; color: var(--muted, #6b7a8d); margin-top: 2px; }
-    .btn-download {
-      background: rgba(0,200,118,0.1); color: #00c876;
-      border: 1px solid rgba(0,200,118,0.25); border-radius: 8px;
-      padding: 5px 12px; font-size: 0.78rem; white-space: nowrap;
-      text-decoration: none; transition: background 0.2s, color 0.2s; flex-shrink: 0;
+
+    .user-panel-sub { font-size: 0.74rem; color: var(--muted); margin-top: 2px; }
+
+    .logout-btn {
+      width: 100%;
+      margin-top: 0.8rem;
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 7px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: border-color .15s, color .15s;
     }
-    .btn-download:hover { background: #00c876; color: #0a0f1a; }
-    .loading-spinner { text-align: center; padding: 3rem; color: var(--muted, #6b7a8d); }
-    .loading-spinner i { font-size: 2rem; color: #00c876; margin-bottom: 1rem; display: block; }
-    .error-msg { text-align: center; padding: 1.5rem; color: #dc3545; font-size: 0.85rem; background: rgba(220,53,69,0.08); border-radius: 10px; }
-    .empty-state { text-align: center; padding: 2.5rem; color: var(--muted, #6b7a8d); }
-    .empty-state i { font-size: 2rem; margin-bottom: 0.75rem; display: block; opacity: 0.4; }
-    .how-it-works { background: rgba(255,255,255,0.02); border: 1px solid var(--border, rgba(255,255,255,0.06)); border-radius: 16px; padding: 2rem; margin-bottom: 3rem; }
-    .how-step { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 1rem; }
-    .how-step:last-child { margin-bottom: 0; }
-    .how-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(0,200,118,0.12); color: #00c876; border: 1px solid rgba(0,200,118,0.25); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
-    .how-text { font-size: 0.85rem; color: var(--muted, #8899aa); line-height: 1.6; padding-top: 4px; }
-    .search-box { max-width: 400px; margin: 0 auto 1.5rem; position: relative; }
-    .search-box input {
-      width: 100%; padding: 10px 18px 10px 40px; border-radius: 20px;
-      border: 1px solid var(--border, rgba(255,255,255,0.12));
-      background: var(--card-bg, #111827); color: var(--text, #e8edf5);
-      font-size: 0.85rem; outline: none; transition: border-color 0.2s;
+
+    .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+    .pending-notice {
+      background: rgba(247,201,72,0.06);
+      border: 1px solid rgba(247,201,72,0.18);
+      border-radius: 10px;
+      padding: 0.75rem 0.9rem;
+      font-size: 0.78rem;
+      color: #c9a52a;
+      line-height: 1.5;
+      margin-top: 0.7rem;
     }
-    .search-box input:focus { border-color: rgba(0,200,118,0.4); }
-    .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted,#6b7a8d); font-size: 0.8rem; }
-    #no-results { display: none; text-align: center; padding: 2rem; color: var(--muted,#6b7a8d); font-size: 0.9rem; }
+
+    /* ── COMPOSER ── */
+    .composer {
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+    }
+
+    .composer-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.85rem;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .composer-avatar img { width:100%;height:100%;object-fit:cover; }
+    .composer-body { flex: 1; }
+
+    .composer-textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-size: 0.94rem;
+      resize: none;
+      min-height: 56px;
+      font-family: inherit;
+      line-height: 1.55;
+    }
+
+    .composer-textarea::placeholder { color: var(--muted); }
+
+    .composer-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      border-top: 1px solid var(--border);
+      padding-top: 0.6rem;
+    }
+
+    .tool-btn {
+      background: none; border: none;
+      color: var(--blue);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 50%;
+      font-size: 0.95rem;
+      transition: background .15s;
+    }
+
+    .tool-btn:hover { background: rgba(0,144,212,0.12); }
+
+    .char-count { font-size: 0.72rem; color: var(--muted); }
+    .char-count.warn { color: var(--gold); }
+    .char-count.over { color: var(--danger); }
+
+    .post-btn {
+      background: var(--teal);
+      color: #050d18;
+      border: none;
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
+
+    .post-btn:hover:not(:disabled) { opacity: .87; }
+    .post-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    .img-preview-wrap {
+      position: relative;
+      margin-top: 0.6rem;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border2);
+      display: none;
+    }
+
+    .img-preview-wrap img { width:100%; max-height:240px; object-fit:cover; display:block; }
+
+    .img-preview-remove {
+      position: absolute; top: 8px; right: 8px;
+      background: rgba(0,0,0,0.7);
+      border: none; color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%; cursor: pointer;
+      font-size: 0.8rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .upload-progress {
+      height: 3px; background: var(--border);
+      border-radius: 2px; margin-top: 0.5rem;
+      overflow: hidden; display: none;
+    }
+
+    .upload-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+      width: 0%; transition: width .3s;
+    }
+
+    /* ── POST CARDS ── */
+    .post-card {
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px;
+      transition: background .15s;
+      animation: fadeIn .28s ease;
+    }
+
+    @keyframes fadeIn { from { opacity:0;transform:translateY(6px); } to { opacity:1;transform:none; } }
+
+    .post-card:hover { background: rgba(255,255,255,0.016); }
+
+    .post-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0d3a55, #004d30);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.82rem;
+      flex-shrink: 0; overflow: hidden;
+    }
+
+    .post-avatar img { width:100%;height:100%;object-fit:cover; }
+    .post-body { flex: 1; min-width: 0; }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 2px;
+    }
+
+    .post-author { font-weight: 700; font-size: 0.87rem; }
+
+    .role-tag {
+      font-size: 0.63rem; padding: 1px 7px;
+      border-radius: 10px; font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .role-lecturer { background: rgba(0,144,212,0.15); color: var(--blue); }
+    .role-student  { background: rgba(247,201,72,0.12); color: var(--gold); }
+
+    .post-time { font-size: 0.73rem; color: var(--muted); margin-left: auto; }
+    .post-dept { font-size: 0.73rem; color: var(--muted); margin-bottom: 5px; }
+
+    .post-content {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
+    .post-image {
+      margin-top: 0.7rem;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      cursor: zoom-in;
+    }
+
+    .post-image img {
+      width: 100%; max-height: 380px;
+      object-fit: cover; display: block;
+      transition: opacity .2s;
+    }
+
+    .post-image:hover img { opacity: .92; }
+
+    .post-actions { display: flex; gap: 16px; margin-top: 0.6rem; }
+
+    .action-btn {
+      background: none; border: none;
+      color: var(--muted);
+      font-size: 0.76rem; cursor: pointer;
+      display: flex; align-items: center; gap: 5px;
+      padding: 3px 0;
+      transition: color .15s;
+    }
+
+    .action-btn:hover { color: var(--danger); }
+
+    /* ── FEED STATES ── */
+    .feed-loading {
+      text-align: center; padding: 3rem 1rem;
+      color: var(--muted); font-size: 0.82rem;
+    }
+
+    .feed-empty {
+      text-align: center; padding: 4rem 1.5rem;
+      color: var(--muted); font-size: 0.84rem;
+    }
+
+    .feed-empty i { font-size: 2.4rem; display: block; margin-bottom: 0.8rem; opacity: .25; }
+
+    .spinner {
+      width: 28px; height: 28px;
+      border: 3px solid var(--border2);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin: 0 auto 0.5rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .feed-end-line {
+      display: flex; align-items: center; gap: 10px;
+      padding: 2rem 1.2rem;
+      color: var(--muted); font-size: 0.76rem;
+    }
+
+    .feed-end-line::before, .feed-end-line::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── ADMIN ── */
+    .admin-panel {
+      background: rgba(224,82,82,0.05);
+      border: 1px solid rgba(224,82,82,0.2);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .admin-title {
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--danger); margin-bottom: 0.8rem;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .admin-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 0; border-bottom: 1px solid var(--border);
+    }
+
+    .admin-row:last-child { border-bottom: none; }
+    .admin-name { flex: 1; font-size: 0.77rem; min-width: 0; }
+    .admin-sub  { font-size: 0.65rem; color: var(--muted); }
+
+    .verify-btn {
+      background: none;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 0.68rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all .15s;
+      flex-shrink: 0;
+    }
+
+    .verify-btn.on { background: rgba(0,200,118,0.12); border-color: rgba(0,200,118,0.3); color: var(--teal); }
+    .verify-btn:hover { border-color: var(--teal); color: var(--teal); }
+
+    /* ── RIGHT SIDEBAR ── */
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .info-card-title { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem; }
+
+    .rule-row {
+      display: flex; align-items: flex-start;
+      gap: 9px; margin-bottom: 0.55rem;
+      font-size: 0.77rem; color: var(--muted); line-height: 1.5;
+    }
+
+    .rule-row i { color: var(--teal); margin-top: 2px; flex-shrink: 0; font-size: 0.7rem; }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.93);
+      z-index: 9999;
+      display: none;
+      align-items: center; justify-content: center;
+      padding: 1rem; cursor: zoom-out;
+    }
+
+    .lightbox.open { display: flex; animation: fadeIn .2s ease; }
+
+    .lightbox img {
+      max-width: 100%; max-height: 90vh;
+      border-radius: 10px; object-fit: contain;
+      cursor: default;
+    }
+
+    /* ── TOASTS ── */
+    .toast-wrap {
+      position: fixed; bottom: 1.5rem; left: 50%;
+      transform: translateX(-50%);
+      z-index: 9998;
+      display: flex; flex-direction: column;
+      gap: 8px; align-items: center;
+      pointer-events: none;
+    }
+
+    .toast-item {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      padding: 9px 18px;
+      border-radius: 24px;
+      font-size: 0.82rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      animation: fadeIn .22s ease;
+      pointer-events: all;
+    }
+
+    /* ── MOBILE COMPOSE ── */
+    .mobile-fab {
+      display: none;
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--teal); color: #050d18;
+      border: none; font-size: 1.1rem; cursor: pointer;
+      z-index: 100; box-shadow: 0 4px 20px rgba(0,200,118,.4);
+      align-items: center; justify-content: center;
+    }
+
+    @media (max-width: 1024px) { .mobile-fab { display: flex; } }
   </style>
 </head>
 <body>
 
-<!-- ═══ NAVBAR ═══ -->
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg">
   <div class="container">
-    <a class="navbar-brand" href="index.html">&lt;<span>GhostR Software Company</span>/&gt;</a>
-    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+    <a class="navbar-brand" href="/index.html">&lt;<span>GhostR Software Company</span>/&gt;</a>
+    <button class="navbar-toggler border-0" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navMenu">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navMenu">
       <ul class="navbar-nav gap-1">
-        <li class="nav-item"><a class="nav-link" href="index.html#home">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="index.html#about">About</a></li>
-        <li class="nav-item"><a class="nav-link active" href="contributions.html">Contributions</a></li>
-        <li class="nav-item"><a class="nav-link" href="index.html#skills">Services</a></li>
-        <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="/index.html#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/index.html#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/index.html#skills">Services</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/contributions.html">Contributions</a></li>
+        <li class="nav-item"><a class="nav-link" href="/index.html#contact">Contact</a></li>
       </ul>
     </div>
   </div>
 </nav>
 
-<!-- ═══ HERO ═══ -->
-<section class="contrib-hero">
-  <div class="container">
-    <span class="verified-badge"><i class="fas fa-circle-check"></i> Verified Contributors</span>
-    <h1 class="hero-name mt-3" style="font-size:2.4rem;">
-      Academic <span class="accent">Contributions</span>
-    </h1>
-    <p class="hero-desc mx-auto" style="max-width:560px;">
-      Lecturers and students who hold a GhostR verification badge. Each verified contributor
-      publishes up to <strong>3 documents per semester</strong> — coursework, notes, and a README guide.
-    </p>
-    <div class="how-it-works mt-4 text-start mx-auto" style="max-width:600px;">
-      <div class="how-step"><div class="how-num">1</div><div class="how-text">Browse verified lecturers and students below. Blue-tick means GhostR has confirmed their academic identity.</div></div>
-      <div class="how-step"><div class="how-num">2</div><div class="how-text">Click any contributor's card to see the documents they published this semester.</div></div>
-      <div class="how-step"><div class="how-num">3</div><div class="how-text">Click <strong>Download</strong> on any document — files open directly from GitHub's secure servers.</div></div>
-    </div>
-  </div>
-</section>
+<!-- THREE-COLUMN LAYOUT -->
+<div class="contrib-layout">
 
-<!-- ═══ FILTER + SEARCH ═══ -->
-<div class="container mb-2">
-  <div class="search-box">
-    <i class="fas fa-search"></i>
-    <input type="text" id="search-input" placeholder="Search by name, department…" />
-  </div>
-  <div class="filter-bar">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="lecturer">Lecturers</button>
-    <button class="filter-btn" data-filter="student">Students</button>
-    <button class="filter-btn" data-filter="information technology">Information Technology</button>
-    <button class="filter-btn" data-filter="business administration">Business Administration</button>
-    <button class="filter-btn" data-filter="education">Education</button>
-    <button class="filter-btn" data-filter="social sciences">Social Sciences</button>
-    <button class="filter-btn" data-filter="humanities">Humanities</button>
-  </div>
-</div>
+  <!-- ════ LEFT SIDEBAR ════ -->
+  <aside class="left-sidebar">
 
-<!-- ═══ GRID ═══ -->
-<section class="section-pad" style="padding-top:1rem;">
-  <div class="container">
-    <div id="loading-state" class="loading-spinner">
-      <i class="fas fa-circle-notch fa-spin"></i>Loading contributors…
-    </div>
-    <div class="row g-4" id="contributors-grid"></div>
-    <div id="no-results">
-      <i class="fas fa-search" style="opacity:0.3;font-size:1.8rem;display:block;margin-bottom:0.5rem;"></i>
-      No contributors match your search.
-    </div>
-  </div>
-</section>
+    <!-- Auth card (shown when logged out) -->
+    <div class="side-card" id="auth-card">
+      <div class="side-card-title">Join the conversation</div>
+      <div class="auth-tabs">
+        <div class="auth-tab active" data-tab="login">Sign In</div>
+        <div class="auth-tab" data-tab="signup">Sign Up</div>
+      </div>
 
-<!-- ═══ MODAL ═══ -->
-<div class="modal fade" id="docs-modal" tabindex="-1">
-  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div>
-          <h5 class="modal-title" id="modal-contrib-name">Documents</h5>
-          <div class="section-label mt-1" style="margin-bottom:0;" id="modal-contrib-role"></div>
+      <!-- LOGIN -->
+      <div class="auth-form-wrap active" id="form-login">
+        <div class="field-group">
+          <label class="field-label">Email</label>
+          <input class="field-input" type="email" id="l-email" placeholder="you@email.com" />
         </div>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <input class="field-input" type="password" id="l-pass" placeholder="••••••••" />
+        </div>
+        <button class="auth-btn" id="login-btn">Sign In</button>
+        <div class="auth-msg" id="login-msg"></div>
       </div>
-      <div class="modal-body" id="modal-body-content"></div>
-      <div class="modal-footer">
-        <button class="btn-outline-custom" data-bs-dismiss="modal">Close</button>
+
+      <!-- SIGNUP -->
+      <div class="auth-form-wrap" id="form-signup">
+        <div class="field-group">
+          <label class="field-label">Full Name</label>
+          <input class="field-input" type="text" id="s-name" placeholder="Dr. Jane Nakato" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Email</label>
+          <input class="field-input" type="email" id="s-email" placeholder="you@email.com" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <input class="field-input" type="password" id="s-pass" placeholder="min. 6 characters" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">I am a</label>
+          <select class="field-select" id="s-role">
+            <option value="lecturer">Lecturer</option>
+            <option value="student">Student</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Department / Course</label>
+          <input class="field-input" type="text" id="s-dept" placeholder="e.g. Computer Science" />
+        </div>
+        <button class="auth-btn" id="signup-btn">Create Account</button>
+        <div class="auth-msg" id="signup-msg"></div>
       </div>
     </div>
-  </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
-}
-</script>
-<script>
-
-// ══════════════════════════════════════════════════════════════════════════════
-const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXJblUL_lbJLSSqSF25xLS1TwkrxFFqiBvTBPvNKnuPboRNlQ6sDPCLB44BIenfzwsZ1-0UvsjRlWj/pub?gid=0&single=true&output=csv';
-// ══════════════════════════════════════════════════════════════════════════════
-
-let activeFilter = 'all';
-
-function parseCSV(text) {
-  const lines = text.trim().split('\n');
-  const headers = splitLine(lines[0]);
-  return lines.slice(1).map(line => {
-    const v = splitLine(line), o = {};
-    headers.forEach((h,i) => { o[h.trim()] = (v[i]||'').trim(); });
-    return o;
-  }).filter(r => r.name && r.name !== 'name');
-}
-
-function splitLine(line) {
-  const out=[]; let cur='', q=false;
-  for(const ch of line){
-    if(ch==='"'){q=!q;}
-    else if(ch===','&&!q){out.push(cur);cur='';}
-    else cur+=ch;
-  }
-  out.push(cur); return out;
-}
-
-function ext(name){ const m=name.match(/\.(\w+)$/); return m?m[1].toLowerCase():'other'; }
-function extIcon(e){ return e==='pdf'?'<i class="fas fa-file-pdf"></i>':['doc','docx'].includes(e)?'<i class="fas fa-file-word"></i>':e==='md'?'<i class="fab fa-markdown"></i>':'<i class="fas fa-file-alt"></i>'; }
-function extCls(e){ return e==='pdf'?'pdf':['doc','docx'].includes(e)?'txt':e==='md'?'md':'other'; }
-
-function buildCard(c) {
-  const ini = c.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  const avatar = c.avatar_url
-    ? `<img src="${c.avatar_url}" class="contrib-avatar" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="contrib-avatar-placeholder" style="display:none">${ini}</div>`
-    : `<div class="contrib-avatar-placeholder">${ini}</div>`;
-  const docs = [[c.doc1_name,c.doc1_url],[c.doc2_name,c.doc2_url],[c.doc3_name,c.doc3_url]].filter(([n])=>n);
-  const safe = JSON.stringify(c).replace(/"/g,'&quot;');
-  return `
-    <div class="col-sm-6 col-lg-4 contributor-item"
-         data-filter="${(c.filter_tag||c.role||'').toLowerCase()}"
-         data-name="${c.name.toLowerCase()}"
-         data-dept="${c.department.toLowerCase()}">
-      <div class="contributor-card" onclick='openModal(${safe})'>
-        ${avatar}
-        <div class="contrib-name">${c.name}
-          <i class="fas fa-circle-check" style="color:#0090d4;font-size:0.7rem;vertical-align:middle;margin-left:4px;" title="GhostR Verified"></i>
-        </div>
-        <div class="contrib-role">${c.role}</div>
-        <div class="contrib-dept">${c.department}</div>
-        ${c.semester?`<div style="text-align:center;margin-bottom:0.6rem;"><span style="font-size:0.7rem;padding:2px 10px;border-radius:12px;background:rgba(0,144,212,0.12);color:#0090d4;border:1px solid rgba(0,144,212,0.2);">${c.semester}</span></div>`:''}
-        <div class="contrib-doc-count"><i class="fas fa-circle"></i> ${docs.length} document${docs.length!==1?'s':''}</div>
+    <!-- User panel (shown when logged in) -->
+    <div class="side-card" id="user-card" style="display:none;">
+      <div class="user-panel-avatar" id="up-av"></div>
+      <div class="user-panel-name" id="up-name">—</div>
+      <div class="user-panel-sub"  id="up-sub">—</div>
+      <div id="pending-notice" class="pending-notice" style="display:none;">
+        <i class="fas fa-hourglass-half" style="color:var(--gold);margin-right:5px;"></i>
+        Your account is <strong>pending verification</strong>. GhostR will review you soon and grant a blue tick. Browse posts while you wait.
       </div>
-    </div>`;
-}
+      <button class="logout-btn" id="logout-btn">
+        <i class="fas fa-right-from-bracket" style="margin-right:5px;"></i>Sign Out
+      </button>
+    </div>
 
-function openModal(c) {
-  document.getElementById('modal-contrib-name').textContent = c.name;
-  document.getElementById('modal-contrib-role').textContent = `${c.role} · ${c.department}`;
-  const docs = [[c.doc1_name,c.doc1_url],[c.doc2_name,c.doc2_url],[c.doc3_name,c.doc3_url]].filter(([n])=>n);
-  document.getElementById('modal-body-content').innerHTML = docs.length
-    ? docs.map(([name,url])=>`
-        <div class="doc-item">
-          <div class="doc-icon ${extCls(ext(name))}">${extIcon(ext(name))}</div>
-          <div class="doc-meta">
-            <div class="doc-name">${name}</div>
-            <div class="doc-type-label">${ext(name).toUpperCase()} · GitHub</div>
+    <!-- Admin panel -->
+    <div class="admin-panel" id="admin-panel">
+      <div class="admin-title"><i class="fas fa-shield-halved"></i> Admin — Verify Users</div>
+      <div id="admin-list"><div style="font-size:.76rem;color:var(--muted);">Loading…</div></div>
+    </div>
+
+  </aside>
+
+  <!-- ════ FEED ════ -->
+  <main class="feed-column">
+
+    <div class="feed-header">
+      <h2><i class="fas fa-layer-group" style="color:var(--teal);font-size:.85rem;margin-right:8px;"></i>Academic Feed</h2>
+      <span style="font-size:.7rem;color:var(--muted);">Verified contributors only</span>
+    </div>
+
+    <!-- Composer (verified users only) -->
+    <div id="composer" style="display:none;">
+      <div class="composer">
+        <div class="composer-avatar" id="comp-av"></div>
+        <div class="composer-body">
+          <textarea class="composer-textarea" id="post-text"
+            placeholder="Share a resource, study tip, or idea with your peers…"
+            rows="3" maxlength="500"></textarea>
+
+          <div class="img-preview-wrap" id="img-wrap">
+            <img id="img-preview" src="" alt="preview" />
+            <button class="img-preview-remove" id="img-remove"><i class="fas fa-times"></i></button>
           </div>
-          <a href="${url}" target="_blank" class="btn-download"><i class="fas fa-download me-1"></i>Download</a>
-        </div>`).join('')
-    : '<div class="empty-state"><i class="fas fa-folder-open"></i>No documents uploaded yet.</div>';
-  new bootstrap.Modal(document.getElementById('docs-modal')).show();
+
+          <div class="upload-progress" id="upload-prog">
+            <div class="upload-progress-bar" id="upload-bar"></div>
+          </div>
+
+          <div class="composer-toolbar">
+            <div>
+              <button class="tool-btn" id="img-btn" title="Attach image (JPG/PNG/GIF, max 5MB)">
+                <i class="fas fa-image"></i>
+              </button>
+              <input type="file" id="img-file" accept="image/jpeg,image/png,image/webp,image/gif"
+                     style="display:none;" />
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span class="char-count" id="char-count">500</span>
+              <button class="post-btn" id="post-btn" disabled>Post</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Posts render here -->
+    <div id="feed"></div>
+    <!-- Sentinel for infinite scroll -->
+    <div id="sentinel" style="height:1px;"></div>
+
+  </main>
+
+  <!-- ════ RIGHT SIDEBAR ════ -->
+  <aside class="right-sidebar">
+
+    <div class="info-card">
+      <div class="info-card-title">📋 Posting Rules</div>
+      <div class="rule-row"><i class="fas fa-circle-check"></i>Text posts and images only — no videos.</div>
+      <div class="rule-row"><i class="fas fa-circle-check"></i>Max 500 characters per post.</div>
+      <div class="rule-row"><i class="fas fa-circle-check"></i>Academic content only — tips, resources, ideas.</div>
+      <div class="rule-row"><i class="fas fa-circle-check"></i>GhostR verifies every account before posts go live.</div>
+      <div class="rule-row"><i class="fas fa-circle-check"></i>Blue tick = GhostR verified contributor.</div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">🎓 What is this?</div>
+      <p style="font-size:.77rem;color:var(--muted);line-height:1.6;">Lecturers and students verified by GhostR Software share academic content here. Sign up, then message GhostR to get your account verified and start posting.</p>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">⚡ Get Verified Fast</div>
+      <a href="https://wa.me/256758388080?text=Hello%20GhostR%2C%20I%20just%20signed%20up%20on%20the%20Contributions%20page.%20Please%20verify%20my%20account."
+         target="_blank" rel="noopener"
+         style="display:flex;align-items:center;gap:9px;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.2);border-radius:10px;padding:10px;text-decoration:none;color:var(--teal);font-size:.78rem;transition:background .15s;">
+        <i class="fab fa-whatsapp" style="font-size:1.15rem;"></i>
+        Message GhostR after signing up
+      </a>
+    </div>
+
+  </aside>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lb-img" src="" alt="full image" onclick="event.stopPropagation()" />
+</div>
+
+<!-- Toasts -->
+<div class="toast-wrap" id="toasts"></div>
+
+<!-- Mobile FAB (only shown to verified logged-in users on mobile) -->
+<button class="mobile-fab" id="mobile-fab" style="display:none;" title="Write a post">
+  <i class="fas fa-pen"></i>
+</button>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   GHOSTR CONTRIBUTIONS · Full client script
+   Supabase · Twitter-style feed · Admin verify panel
+══════════════════════════════════════════════════════════════════ */
+
+/* ─── CONFIG ─────────────────────────────────────────────────── */
+const SUPABASE_URL  = "https://nhlzclqacldotqexgpcw.supabase.co";
+const SUPABASE_ANON = "sb_publishable_DpXybHFF7zX_bigTOmEZ_A_774tLRnG";
+
+/*
+  Set this to the email you sign up with as admin.
+  Only this email sees the admin verify panel.
+  Nobody else can verify users — only you.
+*/
+const ADMIN_EMAIL = "ashrafsoftwareguy@gmail.com";
+
+const PAGE_SIZE = 12;
+
+/* ─── INIT ───────────────────────────────────────────────────── */
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+/* ─── STATE ──────────────────────────────────────────────────── */
+let user     = null;
+let profile  = null;
+let page     = 0;
+let done     = false;
+let loading  = false;
+let selFile  = null;
+
+/* ─── HELPERS ────────────────────────────────────────────────── */
+
+function initials(name) {
+  if (!name) return "?";
+  return name.trim().split(/\s+/).slice(0,2).map(w=>w[0].toUpperCase()).join("");
 }
 
-function renderGrid() {
-  const q = document.getElementById('search-input').value.toLowerCase().trim();
-  let vis = 0;
-  document.querySelectorAll('.contributor-item').forEach(el => {
-    const show = (activeFilter==='all'||el.dataset.filter===activeFilter) &&
-                 (!q||el.dataset.name.includes(q)||el.dataset.dept.includes(q));
-    el.style.display = show?'':'none';
-    if(show) vis++;
+function ago(ts) {
+  const s = Math.floor((Date.now() - new Date(ts))/1000);
+  if (s < 60)   return "just now";
+  if (s < 3600) return Math.floor(s/60)  + "m";
+  if (s < 86400)return Math.floor(s/3600)+ "h";
+  return Math.floor(s/86400) + "d";
+}
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+function toast(msg, ms=3200) {
+  const el = document.createElement("div");
+  el.className = "toast-item";
+  el.textContent = msg;
+  document.getElementById("toasts").appendChild(el);
+  setTimeout(()=>el.remove(), ms);
+}
+
+function msg(id, text, type) {
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = "auth-msg " + type;
+}
+
+function avatarEl(prof, size=42) {
+  const base = `width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:${Math.round(size*.32)}px;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,#0d3a55,#004d30);`;
+  if (prof?.avatar_url)
+    return `<div style="${base}"><img src="${esc(prof.avatar_url)}" style="width:100%;height:100%;object-fit:cover;" alt=""/></div>`;
+  return `<div style="${base}">${initials(prof?.full_name)}</div>`;
+}
+
+/* ─── AUTH TABS ──────────────────────────────────────────────── */
+document.querySelectorAll(".auth-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".auth-tab").forEach(t=>t.classList.remove("active"));
+    document.querySelectorAll(".auth-form-wrap").forEach(f=>f.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById("form-"+tab.dataset.tab).classList.add("active");
   });
-  document.getElementById('no-results').style.display = vis===0?'block':'none';
-}
+});
 
-async function loadContributors() {
-  const grid = document.getElementById('contributors-grid');
-  const load = document.getElementById('loading-state');
+/* ─── SIGN UP ────────────────────────────────────────────────── */
+document.getElementById("signup-btn").addEventListener("click", async () => {
+  const name = document.getElementById("s-name").value.trim();
+  const email= document.getElementById("s-email").value.trim();
+  const pass = document.getElementById("s-pass").value;
+  const role = document.getElementById("s-role").value;
+  const dept = document.getElementById("s-dept").value.trim();
 
-  if (SHEET_CSV_URL === 'YOUR_GOOGLE_SHEET_CSV_PUBLISH_URL_HERE') {
-    load.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--muted,#6b7a8d);">
-      <i class="fas fa-table" style="font-size:2rem;color:#00c876;display:block;margin-bottom:1rem;"></i>
-      <strong style="color:var(--text,#e8edf5);">Google Sheet not connected yet.</strong><br><br>
-      Open <code>contributions.html</code>, find <code>SHEET_CSV_URL</code> and paste your published CSV link.<br>
-      <small>See the comment block in the script for full instructions.</small></div>`;
+  if (!name||!email||!pass||!dept)
+    return msg("signup-msg","Please fill in all fields.","error");
+  if (pass.length < 6)
+    return msg("signup-msg","Password must be at least 6 characters.","error");
+
+  const btn = document.getElementById("signup-btn");
+  btn.disabled=true; btn.textContent="Creating…";
+
+  const {data,error} = await sb.auth.signUp({email,password:pass});
+  if (error) {
+    msg("signup-msg", error.message, "error");
+    btn.disabled=false; btn.textContent="Create Account";
     return;
   }
 
-  try {
-    // Cache-bust: append timestamp so the proxy never serves a stale copy
-    const bust = `&t=${Date.now()}`;
+  // Save profile row
+  await sb.from("profiles").insert({
+    id: data.user.id, full_name:name, role, department:dept, verified:false
+  });
 
-    // Try multiple CORS proxies in order — first success wins
-    const proxies = [
-      url => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}${bust}`,
-      url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-    ];
+  msg("signup-msg",
+    "Account created! Check your email to confirm it, then sign in. Message GhostR on WhatsApp to get verified fast.",
+    "success");
 
-    let csvText = null;
+  btn.disabled=false; btn.textContent="Create Account";
+});
 
-    for (const makeProxy of proxies) {
-      try {
-        const res = await fetch(makeProxy(SHEET_CSV_URL), { cache: 'no-store' });
-        if (!res.ok) continue;
+/* ─── SIGN IN ────────────────────────────────────────────────── */
+document.getElementById("login-btn").addEventListener("click", async () => {
+  const email = document.getElementById("l-email").value.trim();
+  const pass  = document.getElementById("l-pass").value;
+  if (!email||!pass) return msg("login-msg","Enter email and password.","error");
 
-        const text = await res.text();
+  const btn = document.getElementById("login-btn");
+  btn.disabled=true; btn.textContent="Signing in…";
 
-        // allorigins wraps in JSON: {"contents":"...","status":{...}}
-        // corsproxy.io returns raw CSV text
-        if (text.trim().startsWith('{')) {
-          const json = JSON.parse(text);
-          // Guard: allorigins returns "Offline" (plain string) when it can't reach Google
-          if (typeof json.contents === 'string' && json.contents.trim() !== 'Offline') {
-            csvText = json.contents;
-            break;
-          }
-        } else if (text.trim().length > 0) {
-          csvText = text;
-          break;
-        }
-      } catch (_) {
-        // This proxy failed — try the next one
-        continue;
-      }
-    }
+  const {error} = await sb.auth.signInWithPassword({email,password:pass});
+  if (error) msg("login-msg", error.message, "error");
 
-    if (!csvText) throw new Error('All proxies failed or returned empty data. Check your Sheet is published as CSV and "Anyone with the link" can view it.');
+  btn.disabled=false; btn.textContent="Sign In";
+});
 
-    const data = parseCSV(csvText);
-    load.style.display = 'none';
+/* ─── SIGN OUT ───────────────────────────────────────────────── */
+document.getElementById("logout-btn").addEventListener("click", () => sb.auth.signOut());
 
-    if (!data.length) {
-      grid.innerHTML = '<div class="empty-state col-12"><i class="fas fa-users"></i>No contributors added yet. Add rows to your Google Sheet.</div>';
-      return;
-    }
+/* ─── AUTH STATE LISTENER ────────────────────────────────────── */
+sb.auth.onAuthStateChange(async (_event, session) => {
+  if (session?.user) {
+    user = session.user;
+    const {data} = await sb.from("profiles").select("*").eq("id",user.id).single();
+    profile = data;
+    renderUserPanel();
+    if (user.email === ADMIN_EMAIL) loadAdmin();
+  } else {
+    user=null; profile=null;
+    document.getElementById("auth-card").style.display = "block";
+    document.getElementById("user-card").style.display = "none";
+    document.getElementById("admin-panel").style.display = "none";
+    document.getElementById("composer").style.display = "none";
+    document.getElementById("mobile-fab").style.display = "none";
+  }
+});
 
-    grid.innerHTML = data.map(buildCard).join('');
-    renderGrid();
+/* ─── USER PANEL ─────────────────────────────────────────────── */
+function renderUserPanel() {
+  document.getElementById("auth-card").style.display = "none";
+  document.getElementById("user-card").style.display = "block";
 
-  } catch(e) {
-    load.innerHTML = `<div class="error-msg">
-      <i class="fas fa-exclamation-circle me-2"></i>
-      Could not load contributors.<br>
-      <small style="opacity:0.8">${e.message}</small><br><br>
-      <small>Make sure your Sheet is: <strong>Published to web as CSV</strong> and shared as <strong>Anyone with the link → Viewer</strong>.</small>
-    </div>`;
+  // Avatar
+  const av = document.getElementById("up-av");
+  av.style.cssText = "width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;margin-bottom:.7rem;overflow:hidden;";
+  av.innerHTML = profile?.avatar_url
+    ? `<img src="${esc(profile.avatar_url)}" style="width:100%;height:100%;object-fit:cover;" />`
+    : initials(profile?.full_name || user.email);
+
+  document.getElementById("up-name").innerHTML =
+    esc(profile?.full_name || user.email) +
+    (profile?.verified
+      ? ` <i class="fas fa-circle-check" style="color:var(--blue);font-size:.72rem;" title="GhostR Verified"></i>`
+      : "");
+
+  document.getElementById("up-sub").textContent =
+    [profile?.role, profile?.department].filter(Boolean).join(" · ");
+
+  const pn = document.getElementById("pending-notice");
+  if (profile?.verified) {
+    pn.style.display = "none";
+    showComposer();
+  } else {
+    pn.style.display = "block";
+    document.getElementById("composer").style.display = "none";
+    document.getElementById("mobile-fab").style.display = "none";
   }
 }
 
-document.querySelectorAll('.filter-btn').forEach(btn => btn.addEventListener('click', () => {
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  activeFilter = btn.dataset.filter;
-  renderGrid();
-}));
-document.getElementById('search-input').addEventListener('input', renderGrid);
-loadContributors();
+function showComposer() {
+  document.getElementById("composer").style.display = "block";
+
+  const av = window.innerWidth <= 1024
+    ? document.getElementById("mobile-fab")
+    : null;
+
+  if (av) av.style.display = "flex";
+
+  const compAv = document.getElementById("comp-av");
+  compAv.innerHTML = profile?.avatar_url
+    ? `<img src="${esc(profile.avatar_url)}" style="width:100%;height:100%;object-fit:cover;" />`
+    : initials(profile?.full_name || "");
+}
+
+/* ─── COMPOSER LOGIC ─────────────────────────────────────────── */
+const txtEl  = document.getElementById("post-text");
+const ccEl   = document.getElementById("char-count");
+const postBtn= document.getElementById("post-btn");
+
+txtEl.addEventListener("input", () => {
+  const left = 500 - txtEl.value.length;
+  ccEl.textContent = left;
+  ccEl.className = "char-count"+(left<50?" warn":"")+(left<0?" over":"");
+  postBtn.disabled = txtEl.value.trim().length===0 || txtEl.value.length>500;
+});
+
+document.getElementById("img-btn").addEventListener("click",()=>
+  document.getElementById("img-file").click());
+
+document.getElementById("img-file").addEventListener("change", e=>{
+  const f = e.target.files[0];
+  if (!f) return;
+  if (!f.type.startsWith("image/")) { toast("Images only — no videos or other files."); return; }
+  if (f.size > 5*1024*1024)         { toast("Image must be under 5 MB."); return; }
+  selFile = f;
+  document.getElementById("img-preview").src = URL.createObjectURL(f);
+  document.getElementById("img-wrap").style.display = "block";
+});
+
+document.getElementById("img-remove").addEventListener("click",()=>{
+  selFile=null;
+  document.getElementById("img-file").value="";
+  document.getElementById("img-wrap").style.display="none";
+  document.getElementById("img-preview").src="";
+});
+
+/* ─── SUBMIT POST ────────────────────────────────────────────── */
+document.getElementById("post-btn").addEventListener("click", async ()=>{
+  const content = txtEl.value.trim();
+  if (!content || !profile?.verified) return;
+
+  postBtn.disabled=true; postBtn.textContent="Posting…";
+
+  let image_url = null;
+
+  if (selFile) {
+    const prog = document.getElementById("upload-prog");
+    const bar  = document.getElementById("upload-bar");
+    prog.style.display="block"; bar.style.width="25%";
+
+    const ext  = selFile.name.split(".").pop();
+    const path = `${user.id}/${Date.now()}.${ext}`;
+    const {error:ue} = await sb.storage.from("post-images")
+      .upload(path, selFile, {cacheControl:"3600",upsert:false});
+
+    bar.style.width="90%";
+    if (ue) {
+      toast("Upload failed: "+ue.message);
+      prog.style.display="none";
+      postBtn.disabled=false; postBtn.textContent="Post";
+      return;
+    }
+
+    const {data:ud} = sb.storage.from("post-images").getPublicUrl(path);
+    image_url = ud.publicUrl;
+    bar.style.width="100%";
+    setTimeout(()=>{prog.style.display="none";bar.style.width="0%";},400);
+  }
+
+  const {data:newPost,error} = await sb.from("posts")
+    .insert({user_id:user.id,content,image_url})
+    .select("*,profiles(*)")
+    .single();
+
+  if (error) {
+    toast("Could not post: "+error.message);
+  } else {
+    prependCard(newPost);
+    txtEl.value=""; ccEl.textContent="500";
+    selFile=null;
+    document.getElementById("img-file").value="";
+    document.getElementById("img-wrap").style.display="none";
+    postBtn.disabled=true;
+    toast("Posted ✓");
+  }
+
+  postBtn.textContent="Post";
+});
+
+/* ─── FEED ───────────────────────────────────────────────────── */
+async function loadFeed(reset=false) {
+  if (loading || done) return;
+  loading=true;
+
+  if (reset) {
+    page=0; done=false;
+    document.getElementById("feed").innerHTML =
+      `<div class="feed-loading" id="feed-spinner"><div class="spinner"></div>Loading posts…</div>`;
+  }
+
+  const from = page*PAGE_SIZE;
+  const to   = from+PAGE_SIZE-1;
+
+  const {data:posts,error} = await sb.from("posts")
+    .select("*,profiles(*)")
+    .order("created_at",{ascending:false})
+    .range(from,to);
+
+  document.getElementById("feed-spinner")?.remove();
+
+  if (error) {
+    document.getElementById("feed").innerHTML +=
+      `<div class="feed-empty"><i class="fas fa-triangle-exclamation"></i>Could not load posts.<br>Check your connection.</div>`;
+    loading=false; return;
+  }
+
+  if (!posts || posts.length===0) {
+    if (page===0)
+      document.getElementById("feed").innerHTML =
+        `<div class="feed-empty"><i class="fas fa-feather-pointed"></i>No posts yet.<br>Be the first verified contributor to post!</div>`;
+    else
+      document.getElementById("feed").insertAdjacentHTML("beforeend",
+        `<div class="feed-end-line">You're all caught up</div>`);
+    done=true; loading=false; return;
+  }
+
+  posts.forEach(p => appendCard(p));
+  page++;
+
+  if (posts.length < PAGE_SIZE) {
+    done=true;
+    document.getElementById("feed").insertAdjacentHTML("beforeend",
+      `<div class="feed-end-line">You're all caught up</div>`);
+  }
+
+  loading=false;
+}
+
+function cardHTML(post) {
+  const p = post.profiles;
+  const isOwner = user && post.user_id===user.id;
+  const roleClass = p?.role==="lecturer" ? "role-lecturer" : "role-student";
+  const roleLabel = p?.role==="lecturer" ? "Lecturer" : "Student";
+
+  const imgHTML = post.image_url
+    ? `<div class="post-image" onclick="openLB('${esc(post.image_url)}')">
+         <img src="${esc(post.image_url)}" alt="post image" loading="lazy" />
+       </div>`
+    : "";
+
+  const delBtn = isOwner
+    ? `<button class="action-btn" onclick="delPost('${post.id}','${post.image_url||''}')">
+         <i class="fas fa-trash-can"></i> Delete
+       </button>`
+    : "";
+
+  return `
+    <div class="post-card" id="pc-${post.id}">
+      ${avatarEl(p)}
+      <div class="post-body">
+        <div class="post-header">
+          <span class="post-author">${esc(p?.full_name||"Anonymous")}</span>
+          <i class="fas fa-circle-check" style="color:var(--blue);font-size:.68rem;" title="GhostR Verified"></i>
+          <span class="role-tag ${roleClass}">${roleLabel}</span>
+          <span class="post-time">${ago(post.created_at)}</span>
+        </div>
+        <div class="post-dept">${esc(p?.department||"")}</div>
+        <div class="post-content">${esc(post.content)}</div>
+        ${imgHTML}
+        <div class="post-actions">${delBtn}</div>
+      </div>
+    </div>`;
+}
+
+function appendCard(post) {
+  document.getElementById("feed").insertAdjacentHTML("beforeend", cardHTML(post));
+}
+
+function prependCard(post) {
+  const feed = document.getElementById("feed");
+  feed.querySelector(".feed-empty")?.remove();
+  feed.insertAdjacentHTML("afterbegin", cardHTML(post));
+}
+
+async function delPost(id, imgUrl) {
+  if (!confirm("Delete this post permanently?")) return;
+  const {error} = await sb.from("posts").delete().eq("id",id);
+  if (error) { toast("Delete failed: "+error.message); return; }
+  if (imgUrl) {
+    const path = imgUrl.split("/post-images/")[1];
+    if (path) await sb.storage.from("post-images").remove([path]);
+  }
+  document.getElementById("pc-"+id)?.remove();
+  toast("Deleted.");
+}
+
+/* ─── INFINITE SCROLL ────────────────────────────────────────── */
+new IntersectionObserver(entries=>{
+  if (entries[0].isIntersecting) loadFeed();
+},{rootMargin:"250px"}).observe(document.getElementById("sentinel"));
+
+/* ─── ADMIN ──────────────────────────────────────────────────── */
+async function loadAdmin() {
+  document.getElementById("admin-panel").style.display = "block";
+  const {data,error} = await sb.from("profiles")
+    .select("*").order("created_at",{ascending:false});
+
+  if (error||!data||data.length===0) {
+    document.getElementById("admin-list").innerHTML =
+      `<div style="font-size:.75rem;color:var(--muted);">No users yet.</div>`;
+    return;
+  }
+
+  document.getElementById("admin-list").innerHTML = data.map(u=>`
+    <div class="admin-row">
+      <div class="admin-name">
+        <div>${esc(u.full_name||"—")}</div>
+        <div class="admin-sub">${esc(u.role)} · ${esc(u.department)}</div>
+      </div>
+      <button class="verify-btn${u.verified?' on':''}" id="vb-${u.id}"
+              onclick="toggleVerify('${u.id}',${u.verified})">
+        ${u.verified?"✓ Verified":"Verify"}
+      </button>
+    </div>`).join("");
+}
+
+async function toggleVerify(uid, current) {
+  const next = !current;
+  const btn  = document.getElementById("vb-"+uid);
+  btn.disabled=true; btn.textContent="…";
+
+  const {error} = await sb.rpc("admin_verify_user",{target_id:uid,status:next});
+
+  if (error) { toast("Error: "+error.message); btn.disabled=false; return; }
+
+  btn.className = "verify-btn"+(next?" on":"");
+  btn.textContent = next?"✓ Verified":"Verify";
+  btn.disabled=false;
+  btn.onclick = ()=>toggleVerify(uid,next);
+  toast(next?"User verified ✓":"Verification removed.");
+}
+
+/* ─── LIGHTBOX ───────────────────────────────────────────────── */
+function openLB(src) {
+  document.getElementById("lb-img").src = src;
+  document.getElementById("lightbox").classList.add("open");
+}
+
+function closeLightbox() {
+  document.getElementById("lightbox").classList.remove("open");
+  document.getElementById("lb-img").src = "";
+}
+
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeLightbox(); });
+
+/* ─── MOBILE FAB ─────────────────────────────────────────────── */
+document.getElementById("mobile-fab").addEventListener("click", ()=>{
+  window.scrollTo({top:0,behavior:"smooth"});
+  setTimeout(()=>document.getElementById("post-text").focus(), 400);
+});
+
+/* ─── BOOT ───────────────────────────────────────────────────── */
+loadFeed(true);
+
+const yr = document.getElementById("year");
+if (yr) yr.textContent = new Date().getFullYear();
 </script>
+
 </body>
 </html>
