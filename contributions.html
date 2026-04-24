@@ -662,7 +662,7 @@
         </div>
         <div class="field-group">
           <label class="field-label">Department / Course</label>
-          <input class="field-input" type="text" id="s-dept" placeholder="e.g. Computer Science" />
+          <input class="field-input" type="text" id="s-dept" placeholder="e.g. Information Technology" />
         </div>
         <button class="auth-btn" id="signup-btn">Create Account</button>
         <div class="auth-msg" id="signup-msg"></div>
@@ -805,7 +805,7 @@ const SUPABASE_ANON = "sb_publishable_DpXybHFF7zX_bigTOmEZ_A_774tLRnG";
   Only this email sees the admin verify panel.
   Nobody else can verify users — only you.
 */
-const ADMIN_EMAIL = "ashrafsoftwareguy@gmail.com";
+const ADMIN_EMAIL = "ghostreaperuser@gmail.com";
 
 const PAGE_SIZE = 12;
 
@@ -889,7 +889,13 @@ document.getElementById("signup-btn").addEventListener("click", async () => {
   const btn = document.getElementById("signup-btn");
   btn.disabled=true; btn.textContent="Creating…";
 
-  const {data,error} = await sb.auth.signUp({email,password:pass});
+  const {data,error} = await sb.auth.signUp({
+    email,
+    password: pass,
+    options: {
+      emailRedirectTo: window.location.origin + window.location.pathname
+    }
+  });
   if (error) {
     msg("signup-msg", error.message, "error");
     btn.disabled=false; btn.textContent="Create Account";
