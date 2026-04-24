@@ -10,8 +10,8 @@ const SHELL = [
   'manifest.json',
   'css/style.css',
   'js/main.js',
-  'images/icon-192.png',
-  'images/icon-512.png'
+  'images/192.png',
+  'images/512.png'
 ];
 
 // ── INSTALL: cache the site shell ─────────────────────────────────────
