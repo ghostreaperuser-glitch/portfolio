@@ -843,36 +843,24 @@ const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 async function handleAuthRedirect() {
-  // Supabase v2 automatically processes the hash/query tokens when the SDK loads.
-  // We just need to wait for the session to be available and then clean up the URL.
-  // This handles the email confirmation redirect (type=signup or type=recovery).
-
-  const hash   = window.location.hash;
-  const search = window.location.search;
-
-  const hasAuthParams =
-    hash.includes('access_token=') ||
-    hash.includes('refresh_token=') ||
-    search.includes('access_token=') ||
-    search.includes('refresh_token=') ||
-    search.includes('type=');
+  const hasAuthParams = window.location.search.includes('type=')
+    || window.location.search.includes('access_token=')
+    || window.location.search.includes('refresh_token=')
+    || window.location.hash.includes('access_token=')
+    || window.location.hash.includes('refresh_token=');
 
   if (!hasAuthParams) return;
 
-  // Give the SDK a moment to exchange the tokens it found in the URL
-  await new Promise(resolve => setTimeout(resolve, 800));
-
-  const { data: { session } } = await sb.auth.getSession();
-
-  if (session) {
-    toast('✅ Email confirmed — you are signed in!');
-  } else {
-    // The link may have already been used or expired
-    toast('⚠️ Confirmation link expired or already used. Please sign in.');
+  const { data, error } = await sb.auth.getSessionFromUrl({ storeSession: true });
+  if (error) {
+    console.warn('Supabase auth redirect failed:', error.message);
+    return;
   }
 
-  // Clean the tokens out of the URL so they don't linger or cause issues on refresh
-  window.history.replaceState({}, document.title, window.location.pathname);
+  if (data?.session) {
+    toast('Email confirmed. You are signed in.');
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
 }
 
 /* ─── STATE ──────────────────────────────────────────────────── */
@@ -951,10 +939,10 @@ document.getElementById("signup-btn").addEventListener("click", async () => {
   const btn = document.getElementById("signup-btn");
   btn.disabled=true; btn.textContent="Creating…";
 
-  // Always redirect back to the contributions page after email confirmation
-  const authOptions = {
-    emailRedirectTo: 'https://ghostreaperuser-glitch.github.io/portfolio/contributions.html'
-  };
+  const authOptions = {};
+  if (window.location.protocol === "http:" || window.location.protocol === "https:") {
+    authOptions.emailRedirectTo = window.location.origin + window.location.pathname;
+  }
 
   const {data,error} = await sb.auth.signUp({ email, password: pass }, authOptions);
   if (error) {
@@ -968,9 +956,11 @@ document.getElementById("signup-btn").addEventListener("click", async () => {
     id: data.user.id, full_name:name, role, department:dept, verified:false
   });
 
-  msg("signup-msg",
-    "Account created! Check your email and click the confirmation link. Once confirmed, come back here and sign in. Then message GhostR on WhatsApp to get verified fast.",
-    "success");
+  const successText = authOptions.emailRedirectTo
+    ? "Account created! Check your email to confirm it, then sign in. Message GhostR on WhatsApp to get verified fast."
+    : "Account created! Check your email to confirm it, then sign in. If you opened this page directly from a file URL, the email redirect may not work. Open the page over http(s) or host it so the confirmation link reaches this page.";
+
+  msg("signup-msg", successText, "success");
 
   btn.disabled=false; btn.textContent="Create Account";
 });
