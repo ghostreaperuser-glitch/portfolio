@@ -789,7 +789,7 @@
 
     <div class="info-card">
       <div class="info-card-title">⚡ Get Verified Fast</div>
-      <a href="https://wa.me/256758388080?text=Hello%20GhostR%2C%20I%20just%20signed%20up%20on%20the%20Contributions%20page.%20Please%20verify%20my%20account."
+      <a href="https://wa.me/256758388070?text=Hello%20GhostR%2C%20I%20just%20signed%20up%20on%20the%20Contributions%20page.%20Please%20verify%20my%20account."
          target="_blank" rel="noopener"
          style="display:flex;align-items:center;gap:9px;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.2);border-radius:10px;padding:10px;text-decoration:none;color:var(--teal);font-size:.78rem;transition:background .15s;">
         <i class="fab fa-whatsapp" style="font-size:1.15rem;"></i>
@@ -841,6 +841,27 @@ const PAGE_SIZE = 12;
 /* ─── INIT ───────────────────────────────────────────────────── */
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+async function handleAuthRedirect() {
+  const hasAuthParams = window.location.search.includes('type=')
+    || window.location.search.includes('access_token=')
+    || window.location.search.includes('refresh_token=')
+    || window.location.hash.includes('access_token=')
+    || window.location.hash.includes('refresh_token=');
+
+  if (!hasAuthParams) return;
+
+  const { data, error } = await sb.auth.getSessionFromUrl({ storeSession: true });
+  if (error) {
+    console.warn('Supabase auth redirect failed:', error.message);
+    return;
+  }
+
+  if (data?.session) {
+    toast('Email confirmed. You are signed in.');
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+}
 
 /* ─── STATE ──────────────────────────────────────────────────── */
 let user     = null;
