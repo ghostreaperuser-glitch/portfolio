@@ -89,7 +89,8 @@
 
     @media (max-width: 1024px) {
       .contrib-layout { grid-template-columns: 1fr; }
-      .left-sidebar, .right-sidebar { display: none; }
+      .left-sidebar { display: none; }
+      .right-sidebar { display: none; }
     }
 
     /* ── SIDEBARS ── */
@@ -616,6 +617,16 @@
     }
 
     @media (max-width: 1024px) { .mobile-fab { display: flex; } }
+
+    /* ── MOBILE AUTH BAR ── */
+    .mobile-auth-bar {
+      display: none;
+      padding: 0.85rem 1rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    @media (max-width: 1024px) { .mobile-auth-bar { display: block; } }
+    .mobile-auth-bar .side-card { margin-bottom: 0; }
   </style>
 </head>
 <body>
@@ -719,6 +730,9 @@
     </div>
 
   </aside>
+
+  <!-- ════ MOBILE AUTH BAR (visible only on small screens) ════ -->
+  <div class="mobile-auth-bar" id="mobile-auth-bar" style="display:none;"></div>
 
   <!-- ════ FEED ════ -->
   <main class="feed-column">
@@ -842,25 +856,26 @@ const PAGE_SIZE = 12;
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-async function handleAuthRedirect() {
-  const hasAuthParams = window.location.search.includes('type=')
-    || window.location.search.includes('access_token=')
-    || window.location.search.includes('refresh_token=')
-    || window.location.hash.includes('access_token=')
-    || window.location.hash.includes('refresh_token=');
-
+function handleAuthRedirect() {
+  // Supabase v2 handles tokens automatically — we just clean the URL and show a toast.
+  const hash   = window.location.hash;
+  const search = window.location.search;
+  const hasAuthParams =
+    hash.includes('access_token=') ||
+    hash.includes('refresh_token=') ||
+    search.includes('access_token=') ||
+    search.includes('refresh_token=') ||
+    search.includes('type=');
   if (!hasAuthParams) return;
-
-  const { data, error } = await sb.auth.getSessionFromUrl({ storeSession: true });
-  if (error) {
-    console.warn('Supabase auth redirect failed:', error.message);
-    return;
-  }
-
-  if (data?.session) {
-    toast('Email confirmed. You are signed in.');
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
+  // Clean URL immediately — session will arrive via onAuthStateChange
+  window.history.replaceState({}, document.title, window.location.pathname);
+  // Show a toast once the session lands
+  const unsub = sb.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      toast('✅ Email confirmed — you are signed in!');
+      unsub.data.subscription.unsubscribe();
+    }
+  });
 }
 
 /* ─── STATE ──────────────────────────────────────────────────── */
@@ -939,10 +954,10 @@ document.getElementById("signup-btn").addEventListener("click", async () => {
   const btn = document.getElementById("signup-btn");
   btn.disabled=true; btn.textContent="Creating…";
 
-  const authOptions = {};
-  if (window.location.protocol === "http:" || window.location.protocol === "https:") {
-    authOptions.emailRedirectTo = window.location.origin + window.location.pathname;
-  }
+  // Always redirect back to the contributions page after email confirmation
+  const authOptions = {
+    emailRedirectTo: 'https://ghostreaperuser-glitch.github.io/portfolio/contributions.html'
+  };
 
   const {data,error} = await sb.auth.signUp({ email, password: pass }, authOptions);
   if (error) {
@@ -956,11 +971,9 @@ document.getElementById("signup-btn").addEventListener("click", async () => {
     id: data.user.id, full_name:name, role, department:dept, verified:false
   });
 
-  const successText = authOptions.emailRedirectTo
-    ? "Account created! Check your email to confirm it, then sign in. Message GhostR on WhatsApp to get verified fast."
-    : "Account created! Check your email to confirm it, then sign in. If you opened this page directly from a file URL, the email redirect may not work. Open the page over http(s) or host it so the confirmation link reaches this page.";
-
-  msg("signup-msg", successText, "success");
+  msg("signup-msg",
+    "Account created! Check your email and click the confirmation link. Once confirmed, come back here and sign in. Then message GhostR on WhatsApp to get verified fast.",
+    "success");
 
   btn.disabled=false; btn.textContent="Create Account";
 });
@@ -983,6 +996,68 @@ document.getElementById("login-btn").addEventListener("click", async () => {
 /* ─── SIGN OUT ───────────────────────────────────────────────── */
 document.getElementById("logout-btn").addEventListener("click", () => sb.auth.signOut());
 
+/* ─── MOBILE AUTH BAR SYNC ───────────────────────────────────── */
+// On mobile the left sidebar is hidden, so we clone the auth/user card into a bar above the feed
+function syncMobileBar() {
+  const bar = document.getElementById("mobile-auth-bar");
+  if (!bar) return;
+  const isMobile = window.innerWidth <= 1024;
+  if (!isMobile) { bar.style.display = "none"; return; }
+  bar.style.display = "block";
+  // Clone whichever card is currently visible
+  const authCard = document.getElementById("auth-card");
+  const userCard = document.getElementById("user-card");
+  const src = (userCard.style.display !== "none") ? userCard : authCard;
+  bar.innerHTML = "";
+  const clone = src.cloneNode(true);
+  // Give cloned inputs unique IDs so they don't conflict
+  clone.querySelectorAll("[id]").forEach(el => el.id = "m-" + el.id);
+  clone.style.display = "block";
+  bar.appendChild(clone);
+  // Wire up cloned buttons
+  const mLogin = clone.querySelector("#m-login-btn");
+  if (mLogin) mLogin.addEventListener("click", async () => {
+    const email = clone.querySelector("#m-l-email")?.value.trim();
+    const pass  = clone.querySelector("#m-l-pass")?.value;
+    if (!email||!pass) return;
+    mLogin.disabled=true; mLogin.textContent="Signing in…";
+    const {error} = await sb.auth.signInWithPassword({email,password:pass});
+    if (error) { const m=clone.querySelector("#m-login-msg"); if(m){m.textContent=error.message;m.className="auth-msg error";} }
+    mLogin.disabled=false; mLogin.textContent="Sign In";
+  });
+  const mSignup = clone.querySelector("#m-signup-btn");
+  if (mSignup) mSignup.addEventListener("click", async () => {
+    const name  = clone.querySelector("#m-s-name")?.value.trim();
+    const email = clone.querySelector("#m-s-email")?.value.trim();
+    const pass  = clone.querySelector("#m-s-pass")?.value;
+    const role  = clone.querySelector("#m-s-role")?.value;
+    const dept  = clone.querySelector("#m-s-dept")?.value.trim();
+    const msgEl = clone.querySelector("#m-signup-msg");
+    if (!name||!email||!pass||!dept) { if(msgEl){msgEl.textContent="Fill in all fields.";msgEl.className="auth-msg error";} return; }
+    if (pass.length<6) { if(msgEl){msgEl.textContent="Password min 6 chars.";msgEl.className="auth-msg error";} return; }
+    mSignup.disabled=true; mSignup.textContent="Creating…";
+    const {data,error} = await sb.auth.signUp({email,password:pass},{emailRedirectTo:"https://ghostreaperuser-glitch.github.io/portfolio/contributions.html"});
+    if (error) { if(msgEl){msgEl.textContent=error.message;msgEl.className="auth-msg error";} }
+    else {
+      await sb.from("profiles").insert({id:data.user.id,full_name:name,role,department:dept,verified:false});
+      if(msgEl){msgEl.textContent="Account created! Check your email to confirm it.";msgEl.className="auth-msg success";}
+    }
+    mSignup.disabled=false; mSignup.textContent="Create Account";
+  });
+  // Wire auth tabs in clone
+  clone.querySelectorAll(".auth-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      clone.querySelectorAll(".auth-tab").forEach(t=>t.classList.remove("active"));
+      clone.querySelectorAll(".auth-form-wrap").forEach(f=>f.classList.remove("active"));
+      tab.classList.add("active");
+      const target = clone.querySelector("#m-form-"+tab.dataset.tab);
+      if (target) target.classList.add("active");
+    });
+  });
+  const mLogout = clone.querySelector("#m-logout-btn");
+  if (mLogout) mLogout.addEventListener("click", () => sb.auth.signOut());
+}
+
 /* ─── AUTH STATE LISTENER ────────────────────────────────────── */
 sb.auth.onAuthStateChange(async (_event, session) => {
   if (session?.user) {
@@ -999,7 +1074,10 @@ sb.auth.onAuthStateChange(async (_event, session) => {
     document.getElementById("composer").style.display = "none";
     document.getElementById("mobile-fab").style.display = "none";
   }
+  syncMobileBar();
 });
+
+window.addEventListener("resize", syncMobileBar);
 
 /* ─── USER PANEL ─────────────────────────────────────────────── */
 function renderUserPanel() {
@@ -1306,7 +1384,8 @@ document.getElementById("mobile-fab").addEventListener("click", ()=>{
 });
 
 /* ─── BOOT ───────────────────────────────────────────────────── */
-handleAuthRedirect().then(() => loadFeed(true));
+handleAuthRedirect();   // handle email confirm redirect (non-blocking)
+loadFeed(true);         // always load the feed immediately
 
 const yr = document.getElementById("year");
 if (yr) yr.textContent = new Date().getFullYear();
