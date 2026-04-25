@@ -1306,7 +1306,7 @@ document.getElementById("mobile-fab").addEventListener("click", ()=>{
 });
 
 /* ─── BOOT ───────────────────────────────────────────────────── */
-loadFeed(true);
+handleAuthRedirect().then(() => loadFeed(true));
 
 const yr = document.getElementById("year");
 if (yr) yr.textContent = new Date().getFullYear();
