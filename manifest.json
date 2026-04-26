@@ -2,12 +2,12 @@
   "name": "GhostR Software",
   "short_name": "GhostR",
   "description": "GhostR Software — Full-stack development, courses, and academic contributions.",
-  "start_url": "/index.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#0a0f1a",
   "theme_color": "#0a0f1a",
   "orientation": "any",
-  "scope": "/",
+  "scope": "./",
   "lang": "en",
   "categories": ["education", "productivity", "utilities"],
   "icons": [
@@ -29,15 +29,15 @@
       "name": "Contributions",
       "short_name": "Contribs",
       "description": "View verified academic contributors",
-      "url": "/contributions.html",
-      "icons": [{ "src": "images/icon-192.png", "sizes": "192x192" }]
+      "url": "contributions.html",
+      "icons": [{ "src": "images/192.png", "sizes": "192x192" }]
     },
     {
       "name": "Contact GhostR",
       "short_name": "Contact",
       "description": "Get in touch on WhatsApp",
-      "url": "/index.html#contact",
-      "icons": [{ "src": "images/icon-192.png", "sizes": "192x192" }]
+      "url": "index.html#contact",
+      "icons": [{ "src": "images/192.png", "sizes": "192x192" }]
     }
   ]
 }
