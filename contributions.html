@@ -85,6 +85,35 @@ function syncMobileBar(){
   if(!bar) return;
   const isMobile=window.innerWidth<=1024;
   bar.style.display=isMobile?'block':'none';
+
+  const authCard=document.getElementById('auth-card');
+  const userCard=document.getElementById('user-card');
+  const adminPanel=document.getElementById('admin-panel');
+  const leftSidebar=document.querySelector('.left-sidebar');
+  const rightSidebar=document.querySelector('.right-sidebar');
+  if(isMobile){
+    [authCard,userCard,adminPanel].forEach(el=>{
+      if(el && el.parentElement !== bar){
+        bar.appendChild(el);
+      }
+    });
+    if(rightSidebar){
+      rightSidebar.querySelectorAll('.info-card').forEach(card=>bar.appendChild(card));
+    }
+  } else {
+    if(authCard && leftSidebar && authCard.parentElement !== leftSidebar){
+      leftSidebar.insertBefore(authCard, leftSidebar.querySelector('#user-card') || leftSidebar.firstChild);
+    }
+    if(userCard && leftSidebar && userCard.parentElement !== leftSidebar){
+      leftSidebar.insertBefore(userCard, leftSidebar.querySelector('#admin-panel') || null);
+    }
+    if(adminPanel && leftSidebar && adminPanel.parentElement !== leftSidebar){
+      leftSidebar.appendChild(adminPanel);
+    }
+    if(rightSidebar){
+      bar.querySelectorAll('.info-card').forEach(card=>rightSidebar.appendChild(card));
+    }
+  }
 }
 
 function renderUserPanel(){
@@ -168,7 +197,12 @@ async function loadFeed(reset=false){
   try{
     result=await sb.from('posts').select('*,profiles(*)').order('created_at',{ascending:false}).range(from,to);
   }catch(err){
-    feed.innerHTML=`<div class="feed-empty"><i class="fas fa-triangle-exclamation"></i>Could not load posts.<br><small style="color:var(--muted)">Check your connection or Supabase permissions.</small></div>`;
+    feed.innerHTML=`<div class="feed-empty"><i class="fas fa-triangle-exclamation"></i>Could not load posts.<br><small style="color:var(--muted)">${esc(err.message||'Network error')}</small></div>`;
+    loading=false;
+    return;
+  }
+  if(result?.error){
+    feed.innerHTML=`<div class="feed-empty"><i class="fas fa-triangle-exclamation"></i>Could not load posts.<br><small style="color:var(--muted)">${esc(result.error.message)}</small></div>`;
     loading=false;
     return;
   }
