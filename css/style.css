@@ -27,6 +27,8 @@
   --radius:       6px;
   --radius-lg:    12px;
   --transition:   all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* No scrollable width on mobile to prevent horizontal scrollbars from appearing due to the blurred canvas */
+  overflow-x: hidden;
 }
 
 /* ─── BASE ─── */
