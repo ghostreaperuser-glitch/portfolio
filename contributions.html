@@ -6,12 +6,24 @@ function handleAuthRedirect(){
   const hasAuthParams=hash.includes('access_token=')||hash.includes('refresh_token=')||search.includes('access_token=')||search.includes('refresh_token=')||search.includes('type=');
   if(!hasAuthParams) return;
   window.history.replaceState({},document.title,window.location.pathname);
-  const unsub=sb.auth.onAuthStateChange((event,session)=>{
+  const { data: { subscription } } = sb.auth.onAuthStateChange((event,session)=>{
     if(event==='SIGNED_IN'&&session){
       toast('✅ Email confirmed — you are signed in!');
-      unsub.data.subscription.unsubscribe();
+      subscription.unsubscribe();
     }
   });
+}
+
+async function initSession(){
+  const { data } = await sb.auth.getSession();
+  const session = data?.session;
+  if(session?.user){
+    user=session.user;
+    const {data:profileData,error}=await sb.from('profiles').select('*').eq('id',user.id).single();
+    if(!error) profile=profileData;
+    renderUserPanel();
+    if(user.email===ADMIN_EMAIL) loadAdmin();
+  }
 }
 
 function initials(name){
@@ -282,7 +294,15 @@ function registerUI(){
       const authOptions={emailRedirectTo:'https://ghostreaperuser-glitch.github.io/portfolio/contributions.html'};
       const {data,error}=await sb.auth.signUp({email,password:pass},authOptions);
       if(error){showMessage('signup-msg',error.message,'error');signup.disabled=false;signup.textContent='Create Account';return;}
-      await sb.from('profiles').insert({id:data.user.id,full_name:name,role,department:dept,verified:false});
+      const userId=data?.user?.id;
+      if(userId){
+        const {error: profileError}=await sb.from('profiles').insert({id:userId,full_name:name,role,department:dept,verified:false});
+        if(profileError){
+          showMessage('signup-msg','Account created, but profile setup failed: '+profileError.message,'error');
+          signup.disabled=false;signup.textContent='Create Account';
+          return;
+        }
+      }
       showMessage('signup-msg','Account created! Check your email and click the confirmation link. Then sign in.','success');
       signup.disabled=false;signup.textContent='Create Account';
     });
@@ -404,6 +424,7 @@ sb.auth.onAuthStateChange(async (_event,session)=>{
 document.addEventListener('DOMContentLoaded', ()=>{
   registerUI();
   handleAuthRedirect();
+  initSession();
   syncMobileBar();
   loadFeed(true);
   window.addEventListener('resize', syncMobileBar);
