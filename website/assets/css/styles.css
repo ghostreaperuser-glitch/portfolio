@@ -8,6 +8,8 @@
   --light-bg: #F8F9FA;
   --dark-text: #333333;
   --white: #FFFFFF;
+  /* no scrolling on mobiles  */
+  overflow-x: hidden;
 }
 
 body {
