@@ -84,7 +84,7 @@ GhostR will host curated download links for useful software, tools, systems, and
 📧 ashrafsoftwareguy@gmail.com
 📞 +256 758 388 070
 🌍 Rich Electronics Next to Centenary Bank Ibanda Branch, Uganda
-🐙 [github.com/ghostreaperuser-glitch](https://github.com/ghostreaperuser-glitch)
+🐙 [github.com/ssentezaashiraf](https://github.com/ssentezaashiraf)
 💼 [linkedin.com/in/ghost-reaper-6319263b7](https://www.linkedin.com/in/ghost-reaper-6319263b7/)
 
 ---
